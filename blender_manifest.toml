@@ -1,0 +1,12 @@
+schema_version = "1.0.0"
+
+id = "blender_event_graph"
+version = "1.0.0"
+name = "Blender Event Graph"
+tagline = "Perform blender python operations using node"
+maintainer = "polygonvariable <polygonvariable@gmail.com>"
+type = "add-on"
+website = "https://github.com/polygonvariable/blender-event-graph"
+tags = ["Node"]
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
