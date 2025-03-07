@@ -3,6 +3,9 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 
 from ..base.node import EG_Node
 from ..base.library import create_enum
+
+from ..socket.primitive import EGS_String, EGS_Integer, EGS_Float, EGS_Boolean, EGS_Value
+
 from ..operator.exec_main import EGOP_ExecuteMain
 
 
@@ -30,52 +33,12 @@ class EGN_Print(EG_Node):
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("EGS_Value", "value")
+        self.add_in(EGS_String.bl_idname, "value")
         self.add_exec_out("exec")
 
     def execute(self):
         print(self.get_input_value("value"))
         self.execute_next("exec")
-
-class PNY_ToFloat(EG_Node):
-    """Event To Float Node"""
-    
-    bl_idname = "PNY_ToFloat"
-    bl_label = "To Float"
-
-    def init(self, context):
-        self.add_in("EGS_Value", "value")
-        self.add_out("NodeSocketFloat", "result")
-
-    def on_result(self):
-        return float(self.get_input_value("value"))
-
-class PNY_ToInt(EG_Node):
-    """Event To Int Node"""
-    
-    bl_idname = "PNY_ToInt"
-    bl_label = "To Int"
-
-    def init(self, context):
-        self.add_in("EGS_Value", "value")
-        self.add_out("NodeSocketInt", "result")
-
-    def on_result(self):
-        return int(self.get_input_value("value"))
-
-class PNY_ToString(EG_Node):
-    """Event To String Node"""
-    
-    bl_idname = "PNY_ToString"
-    bl_label = "To String"
-
-    def init(self, context):
-        self.add_in("EGS_Value", "value")
-        self.add_out("NodeSocketString", "result")
-
-    def on_result(self):
-        return str(self.get_input_value("value"))
-    
 
 class EGN_Math(EG_Node):
     """Event Math Node"""
@@ -145,7 +108,7 @@ class EGN_ForLoop(EG_Node):
     def init(self, context):
         self.add_exec_in("exec")
         self.add_exec_out("loop")
-        self.add_out("NodeSocketInt", "index")
+        self.add_out("NodeSocketInt", "index") # bind: index -> on_index
         self.add_exec_out("completed")
 
     def on_index(self):
@@ -157,7 +120,7 @@ class EGN_ForLoop(EG_Node):
             add_variable_for_node(self, "index", i)
             self.execute_next("loop")
 
-        remove_variable_for_node(self, "index")
+        remove_variable_by_node(self, "index")
         self.execute_next("completed")
 
     def draw_buttons(self, context, layout):
@@ -224,7 +187,7 @@ def add_variable_for_node(node, name, value):
 def get_variable_for_node(node, name):
     return get_variable(f"{node.node_uuid}_{name}")
 
-def remove_variable_for_node(node, name):
+def remove_variable_by_node(node, name):
     remove_variable(f"{node.node_uuid}_{name}")
 
 class EGN_SetVariable(EG_Node):
@@ -339,9 +302,6 @@ classes = [
     EGN_CompareOperator,
     EGN_SetVariable,
     EGN_GetVariable,
-    PNY_ToInt,
-    PNY_ToString,
-    PNY_ToFloat,
     EGN_IfElse,
     EGN_ForLoop,
     EGN_Array,

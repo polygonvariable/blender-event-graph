@@ -2,6 +2,7 @@ from nodeitems_utils import NodeCategory, NodeItem, register_node_categories, un
 
 from .base import tree
 from .node import base
+from .node import cast
 from .node import literal
 
 
@@ -24,6 +25,7 @@ def create_categories(classes):
 def register():
     node_categories = [
         EG_Category("EGC_BASE", "Base", items=create_categories(base.classes)),
+        EG_Category("EGC_CAST", "Cast", items=create_categories(cast.classes)),
         EG_Category("EGC_LITERAL", "Literal", items=create_categories(literal.classes)),
     ]
     register_node_categories("EG_NODES", node_categories)

@@ -1,13 +1,14 @@
 import uuid
 import bpy
 from bpy.props import ( StringProperty )
+from ..socket.derived import EGS_Execute
 
 class EG_Node(bpy.types.Node):
     """Event Node"""
 
     bl_idname = "EG_Node"
     bl_label = "Event Node"
-    bl_icon = "FILE_SCRIPT"
+    bl_icon = "SYSTEM"
     bl_width_default = 180
 
 
@@ -15,26 +16,44 @@ class EG_Node(bpy.types.Node):
     node_is_pure = False
 
 
-    def add_in(self, socket_type, name = "in", hide_value=True):
+    def add_in(self, socket_type, name = "in", limit = 1, hide_value=True):
         pin = self.inputs.new(socket_type, name)
+        pin.link_limit = limit
         pin.hide_value = hide_value
 
 
-    def add_out(self, socket_type, name = "out"):
-        self.outputs.new(socket_type, name)
+    def add_out(self, socket_type, name = "out", limit = 100):
+        pin = self.outputs.new(socket_type, name)
+        pin.link_limit = limit
 
 
     def add_exec_in(self, name = "in", hide_value=True):
-        self.add_in("EGS_Execute", name, hide_value)
+        self.add_in(EGS_Execute.bl_idname, name, 100, hide_value)
 
 
     def add_exec_out(self, name = "out"):
-        self.add_out("EGS_Execute", name)
+        self.add_out(EGS_Execute.bl_idname, name, 1)
 
 
     def init(self, context):
         self.default_in()
         self.default_out()
+
+
+    def validate_sockets(self, node_tree, sockets):
+        for socket in sockets:
+            if socket.is_linked:
+                for link in list(socket.links):
+                    if link.from_socket.bl_idname != link.to_socket.bl_idname:
+                        node_tree.links.remove(link)
+
+
+    def validate_links(self):
+
+        node_tree = self.id_data
+
+        self.validate_sockets(node_tree, self.inputs)
+        self.validate_sockets(node_tree, self.outputs)
 
 
     def execute_next(self, name):

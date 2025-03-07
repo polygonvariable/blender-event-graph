@@ -1,9 +1,10 @@
 import bpy
 
-from .socket import exec
+from .socket import derived
+from .socket import primitive
 
 classes = []
-classes += exec.classes
+classes += derived.classes + primitive.classes
 
 def register():
     for cls in classes:

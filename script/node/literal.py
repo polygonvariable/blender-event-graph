@@ -4,6 +4,8 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 from ..base.node import EG_Node
 from ..base.library import create_enum
 
+from ..socket.primitive import EGS_String, EGS_Integer, EGS_Float, EGS_Boolean, EGS_Value
+
 
 class EGN_LiteralInteger(EG_Node):
     """Event Literal Integer Node"""
@@ -16,7 +18,7 @@ class EGN_LiteralInteger(EG_Node):
     value: IntProperty(name="Value") # type: ignore
 
     def init(self, context):
-        self.add_out("EGS_Integer", "value")
+        self.add_out(EGS_Integer.bl_idname, "value")
 
     def on_value(self):
         return self.value
@@ -36,7 +38,7 @@ class EGN_LiteralFloat(EG_Node):
     value: FloatProperty(name="Value") # type: ignore
 
     def init(self, context):
-        self.add_out("EGS_Float", "value")
+        self.add_out(EGS_Float.bl_idname, "value")
 
     def on_value(self):
         return self.value
@@ -56,7 +58,7 @@ class EGN_LiteralString(EG_Node):
     value: StringProperty(name="Value") # type: ignore
 
     def init(self, context):
-        self.add_out("EGS_String", "value")
+        self.add_out(EGS_String.bl_idname, "value")
 
     def on_value(self):
         return self.value
@@ -76,7 +78,7 @@ class EGN_LiteralBoolean(EG_Node):
     value: BoolProperty(name="Value") # type: ignore
 
     def init(self, context):
-        self.add_out("EGS_Boolean", "value")
+        self.add_out(EGS_Boolean.bl_idname, "value")
 
     def on_value(self):
         return self.value
