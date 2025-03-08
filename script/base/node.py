@@ -1,19 +1,26 @@
 import uuid
 import bpy
 from bpy.props import ( StringProperty )
+from enum import Enum
+
 from ..socket.derived import EGS_Execute
 
-class EG_Node(bpy.types.Node):
-    """Event Node"""
 
-    bl_idname = "EG_Node"
-    bl_label = "Event Node"
-    bl_icon = "SYSTEM"
+class EG_NodeType(Enum):
+    PURE = 0
+    IMPURE = 1
+
+
+class EG_PureNode(bpy.types.Node):
+    """Pure node doesnt have execute socket"""
+
+    bl_idname = "EG_PureNode"
+    bl_label = "Pure Node"
+    bl_icon = "MOD_PARTICLE_INSTANCE"
     bl_width_default = 180
+    
 
-
-    node_uuid: StringProperty(name="Node UUID", default=str(uuid.uuid4())) # type: ignore
-    node_is_pure = False
+    node_type = EG_NodeType.PURE
 
 
     def add_in(self, socket_type, name = "in", limit = 1, hide_value=True):
@@ -27,93 +34,159 @@ class EG_Node(bpy.types.Node):
         pin.link_limit = limit
 
 
-    def add_exec_in(self, name = "in", hide_value=True):
-        self.add_in(EGS_Execute.bl_idname, name, 100, hide_value)
+    def get_input_value(self, name):
+        
+        # Get socket and check if its valid
+        # else return None
+        input_socket = self.inputs.get(name)
+        if input_socket:
+
+            # Check if socket is linked and get its value
+            # else get default value
+            if input_socket.is_linked and input_socket.links[0]:
+
+                # Get source node and its name
+                # and create binding method name
+                source_node = input_socket.links[0].from_node
+                source_method = f"on_{input_socket.links[0].from_socket.name.replace(' ', '_')}"
+
+                # If source node have its binding method then
+                # return its value
+                if hasattr(source_node, source_method):
+
+                    method = getattr(source_node, source_method)
+                    if callable(method):
+
+                        return method()
+                
+            else:
+                return input_socket.default_value
+            
+        return None
+
+
+    def get_input_values(self, name):
+        
+        values = []
+        
+        # Get socket and check if its valid
+        # and return list
+        input_socket = self.inputs.get(name)
+        if input_socket:
+            
+            # If socket is linked then get its values
+            # else return default value in list
+            if input_socket.is_linked:
+                
+                # Iterate through all socket links and
+                # get source node and its value
+                links = input_socket.links
+                for link in links:
+
+                    # Get source node and its name
+                    # and create binding method name
+                    source_node = link.from_node
+                    source_method = f"on_{link.from_socket.name.replace(' ', '_')}"
+
+                    # If source node have its binding method then
+                    # return its value
+                    if hasattr(source_node, source_method):
+
+                        method = getattr(source_node, source_method)
+                        if callable(method):
+
+                            values.append(method())
+
+            else:
+                return values.append(input_socket.default_value)
+
+        return values
+    
+
+class EG_Node(EG_PureNode):
+    """Event Node"""
+
+    bl_idname = "EG_ImpureNode"
+    bl_label = "Impure Node"
+    bl_icon = "SYSTEM"
+
+
+    node_type = EG_NodeType.IMPURE
+    node_uuid: StringProperty(name="Node UUID", default=str(uuid.uuid4()), options={"SKIP_SAVE"}) # type: ignore
+
+
+    def raid(self):
+        self.node_uuid = str(uuid.uuid4())
+
+
+    def init(self, context):
+        self.raid()
+
+
+    def draw_buttons(self, context, layout):
+        layout.prop(self, "node_uuid")
+
+
+    def add_exec_in(self, name = "in"):
+        self.add_in(EGS_Execute.bl_idname, name, 100, True)
 
 
     def add_exec_out(self, name = "out"):
         self.add_out(EGS_Execute.bl_idname, name, 1)
 
 
-    def init(self, context):
-        self.default_in()
-        self.default_out()
-
-
-    def validate_sockets(self, node_tree, sockets):
-        for socket in sockets:
-            if socket.is_linked:
-                for link in list(socket.links):
-                    if link.from_socket.bl_idname != link.to_socket.bl_idname:
-                        node_tree.links.remove(link)
-
-
-    def validate_links(self):
-
-        node_tree = self.id_data
-
-        self.validate_sockets(node_tree, self.inputs)
-        self.validate_sockets(node_tree, self.outputs)
-
-
     def execute_next(self, name):
+
+        # Get output socket and check if its valid
+        # and linked
         output_socket = self.outputs.get(name)
         if output_socket and output_socket.is_linked:
+
+            # Get first linked node and check if it
+            # have execute method and call it
             target_node = output_socket.links[0].to_node
-            if hasattr(target_node, "execute"):
-                target_node.execute()
+            if hasattr(target_node, "__execute__"):
+
+                target_node.__execute__()
     
 
     def execute_previous(self, name):
+
+        # Get input socket and check if its valid
+        # and linked
         input_socket = self.inputs.get(name)
         if input_socket and input_socket.is_linked:
+
+            # Get first linked node and check if it
+            # have execute method and call it
             source_node = input_socket.links[0].from_node
-            if hasattr(source_node, "execute"):
-                source_node.execute()
+            if hasattr(source_node, "__execute__"):
+
+                source_node.__execute__()
 
 
-    def get_input_value(self, name):
-        input_socket = self.inputs.get(name)
+    def __execute__(self):
 
-        if input_socket and input_socket.is_linked:
+        try:
 
-            source_node = input_socket.links[0].from_node
-            source_method = f"on_{input_socket.links[0].from_socket.name.replace(' ', '_')}"
+            if self.before_execute():
+                self.execute()
+            else:
+                print("Node execution failed or terminated")
 
-            if hasattr(source_node, source_method):
-
-                if hasattr(source_node, "execute") and source_node.node_is_pure:
-                    source_node.execute()
-                    
-                method = getattr(source_node, source_method)
-                if callable(method):
-                    return method()
-
-        return None
+        except Exception as e:
+            print(e)
 
 
-    def get_input_values(self, name):
+    def before_execute(self):
 
-        values = []
-        input_socket = self.inputs.get(name)
+        # Generate unique node uuid when its about to be executed
+        # to prevent sharing of data between similar nodes
+        self.raid()
 
-        if input_socket and input_socket.is_linked:
-            
-            links = input_socket.links
-            for link in links:
+        return True
 
-                source_node = link.from_node
-                source_method = f"on_{link.from_socket.name.replace(' ', '_')}"
-
-                if hasattr(source_node, source_method):
-                    method = getattr(source_node, source_method)
-
-                    if callable(method):
-                        values.append(method())
-
-        return values
-    
 
     def execute(self):
         return ""
-
+    

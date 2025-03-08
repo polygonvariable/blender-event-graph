@@ -35,5 +35,5 @@ def add_variable_for_node(node, name, value):
 def get_variable_for_node(node, name):
     return get_variable(f"{node.node_uuid}_{name}")
 
-def remove_variable_for_node(node, name):
+def remove_variable_by_node(node, name):
     remove_variable(f"{node.node_uuid}_{name}")

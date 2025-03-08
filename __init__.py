@@ -6,7 +6,7 @@ bl_info = {
     "location": "Editor Type > Event Graph",
     "description": "Perform blender python operations using node",
     "warning": "",
-    "doc_url": "https://github.com/polygonvariable/event-graph",
+    "doc_url": "https://github.com/polygonvariable/blender-event-graph",
     "category": "Utility",
 }
 

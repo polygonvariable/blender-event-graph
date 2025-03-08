@@ -9,7 +9,6 @@ class EG_Socket(NodeSocket):
     bl_idname = "EG_Socket"
     bl_label = "Event Socket"
 
-    socket_title = ""
     socket_color = (1.0, 1.0, 1.0, 1.0)
 
     def draw(self, context, layout, node, text):

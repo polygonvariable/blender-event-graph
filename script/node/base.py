@@ -1,10 +1,12 @@
+import uuid
 import bpy
-from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty )
+from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ..base.node import EG_Node
 from ..base.library import create_enum
 
-from ..socket.primitive import EGS_String, EGS_Integer, EGS_Float, EGS_Boolean, EGS_Value
+from ..socket.user import EGS_Object
+from ..socket.primitive import EGS_Value
 
 from ..operator.exec_main import EGOP_ExecuteMain
 
@@ -16,7 +18,9 @@ class EGN_Definition(EG_Node):
     bl_label = "Definition"
 
     def init(self, context):
+        super().init(context)
         self.add_exec_out("exec")
+        self.add_out(EGS_Object.bl_idname, "args")
 
     def draw_buttons(self, context, layout):
         layout.operator(EGOP_ExecuteMain.bl_idname, text="Execute")
@@ -32,13 +36,15 @@ class EGN_Print(EG_Node):
     bl_label = "Print"
 
     def init(self, context):
+        super().init(context)
         self.add_exec_in("exec")
-        self.add_in(EGS_String.bl_idname, "value")
+        self.add_in("NodeSocketString", "value")
         self.add_exec_out("exec")
 
     def execute(self):
         print(self.get_input_value("value"))
         self.execute_next("exec")
+
 
 class EGN_Math(EG_Node):
     """Event Math Node"""
@@ -106,6 +112,7 @@ class EGN_ForLoop(EG_Node):
     end: IntProperty(name="End", default=10, min=0) # type: ignore
 
     def init(self, context):
+        super().init(context)
         self.add_exec_in("exec")
         self.add_exec_out("loop")
         self.add_out("NodeSocketInt", "index") # bind: index -> on_index
@@ -124,6 +131,7 @@ class EGN_ForLoop(EG_Node):
         self.execute_next("completed")
 
     def draw_buttons(self, context, layout):
+        super().draw_buttons(context, layout)
         layout.prop(self, "start")
         layout.prop(self, "end")
 
@@ -146,8 +154,9 @@ class EGN_CompareOperator(EG_Node):
         layout.prop(self, "operator")
 
     def init(self, context):
-        self.add_in("EGS_Value", "A")
-        self.add_in("EGS_Value", "B")
+        super().init(context)
+        self.add_in(EGS_Value.bl_idname, "A")
+        self.add_in(EGS_Value.bl_idname, "B")
         self.add_out("NodeSocketBool", "result")
 
     def on_result(self):
@@ -203,6 +212,7 @@ class EGN_SetVariable(EG_Node):
         layout.prop(self, "name")
 
     def init(self, context):
+        super().init(context)
         self.add_exec_in("exec")
         self.add_in("EGS_Value", "value")
         self.add_exec_out("exec")
@@ -230,6 +240,7 @@ class EGN_GetVariable(EG_Node):
     def on_value(self):
         return get_variable(self.name)
     
+
 class EGN_Array(EG_Node):
     """Event Array Node"""
     
@@ -295,6 +306,46 @@ class EGN_ArrayPop(EG_Node):
         arr.pop()
         return arr
 
+
+def get_graphs(self, context):
+    """Dynamically fetch all graphs of type EG_NodeTree."""
+    graphs = [(tree.name, tree.name, "") for tree in bpy.data.node_groups if tree.bl_idname == "EG_NodeTree"]
+    return graphs if graphs else [("None", "None", "No graphs available")]
+
+
+
+class EGN_CallGraph(EG_Node):
+
+    """Node to list available EG_NodeTree graphs."""
+    
+    bl_idname = "EGN_CallGraph"
+    bl_label = "Call Graph"
+
+    selected_graph: EnumProperty(
+        name="Graph",
+        description="Select an Event Graph",
+        items=get_graphs
+    ) # type: ignore
+
+    def draw_buttons(self, context, layout):
+        layout.prop(self, "selected_graph", text="Graph")
+
+    def init(self, context):
+        self.add_exec_in("exec")
+        self.add_in("NodeSocketString", "args")
+        self.add_exec_out("exec")
+        self.add_out("NodeSocketString", "args")
+
+    def execute(self):
+        graph = bpy.data.node_groups.get(self.selected_graph)
+        if graph:
+            for node in graph.nodes:
+                if node.bl_idname == "EGN_Definition" and hasattr(node, "execute"):
+                    node.execute()
+
+        self.execute_next("exec")
+
+
 classes = [
     EGN_Definition,
     EGN_Print,
@@ -307,5 +358,6 @@ classes = [
     EGN_Array,
     EGN_ArrayAppend,
     EGN_ArrayPop,
-    EGN_OperatorAdd
+    EGN_OperatorAdd,
+    EGN_CallGraph,
 ]

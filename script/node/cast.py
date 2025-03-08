@@ -4,7 +4,7 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 from ..base.node import EG_Node
 from ..base.library import create_enum
 
-from ..socket.primitive import EGS_String, EGS_Integer, EGS_Float, EGS_Boolean, EGS_Value
+from ..socket.primitive import EGS_Value
 
 
 class PNY_ToFloat(EG_Node):
@@ -12,6 +12,8 @@ class PNY_ToFloat(EG_Node):
     
     bl_idname = "PNY_ToFloat"
     bl_label = "To Float"
+
+    node_is_pure = True
 
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")
@@ -27,6 +29,8 @@ class PNY_ToInteger(EG_Node):
     bl_idname = "PNY_ToInteger"
     bl_label = "To Integer"
 
+    node_is_pure = True
+
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")
         self.add_out("NodeSocketInt", "result") # bind: result -> on_result
@@ -40,6 +44,8 @@ class PNY_ToString(EG_Node):
     
     bl_idname = "PNY_ToString"
     bl_label = "To String"
+
+    node_is_pure = True
 
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")

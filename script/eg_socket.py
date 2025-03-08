@@ -1,10 +1,9 @@
 import bpy
 
-from .socket import derived
-from .socket import primitive
+from .socket import derived, primitive, user
 
 classes = []
-classes += derived.classes + primitive.classes
+classes += derived.classes + primitive.classes + user.classes
 
 def register():
     for cls in classes:

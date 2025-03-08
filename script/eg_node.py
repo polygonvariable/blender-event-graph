@@ -1,11 +1,9 @@
 import bpy
 
-from .node import base
-from .node import cast
-from .node import literal
+from .node import base, cast, literal, string as n_string, light
 
 classes = []
-classes += base.classes + cast.classes + literal.classes
+classes += base.classes + cast.classes + literal.classes + n_string.classes + light.classes
 
 def register():
     for cls in classes:
