@@ -15,7 +15,7 @@ class EGN_Definition(EG_Node):
     """Event Definition Node"""
     
     bl_idname = "EGN_Definition"
-    bl_label = "Definition"
+    bl_label = "Function"
 
     def init(self, context):
         super().init(context)

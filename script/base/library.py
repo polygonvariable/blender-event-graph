@@ -17,6 +17,10 @@ def create_enum(items = []):
     return enum_items
 
 
+def is_objectId_valid(object_Id):
+    return object_Id is not None and object_Id in bpy.data.objects
+
+
 variable_map = {}
 
 def flush_variables():

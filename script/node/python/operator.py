@@ -170,11 +170,27 @@ class EGN_MembershipOperator(EG_PureNode):
         return False
 
 
+class EGN_IsNone(EG_PureNode):
+    """Check if value is None"""
+    
+    bl_idname = "EGN_IsNone"
+    bl_label = "Is None"
+
+    def init(self, context):
+        self.add_in(EGS_Value.bl_idname, "a")
+        self.add_out("NodeSocketBool", "result") # bind: result -> on_result
+
+    def on_result(self):
+        in_a = self.get_input_value("a")
+        return in_a is None
+
+
 classes = [
     EGN_CompareOperator,
     EGN_LogicalAndOperator,
     EGN_LogicalOrOperator,
     EGN_LogicalNotOperator,
     EGN_IdentityOperator,
-    EGN_MembershipOperator
+    EGN_MembershipOperator,
+    EGN_IsNone
 ]

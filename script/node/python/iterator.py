@@ -15,6 +15,7 @@ class EGN_ForLoop(EG_Node):
     
     bl_idname = "EGN_ForLoop"
     bl_label = "For Loop"
+    bl_icon = "UV_VERTEXSEL"
 
     start: IntProperty(name="Start", default=0, min=0) # type: ignore
     end: IntProperty(name="End", default=10, min=0) # type: ignore
@@ -52,6 +53,7 @@ class EGN_ForEach(EG_Node):
     
     bl_idname = "EGN_ForEach"
     bl_label = "For Each"
+    bl_icon = "UV_VERTEXSEL"
 
     def init(self, context):
         super().init(context)

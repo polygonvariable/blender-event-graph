@@ -83,7 +83,8 @@ class PNY_SetToArray(EG_PureNode):
 classes = [
     PNY_ToInteger,
     PNY_ToString,
+    
     PNY_ToFloat,
     PNY_ArrayToSet,
-    PNY_SetToArray
+    PNY_SetToArray,
 ]

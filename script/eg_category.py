@@ -10,6 +10,7 @@ from .node.python import iterator as n_iterator
 from .node.python import array as n_array
 from .node.python import set as n_set
 from .node.python import map as n_map
+from .node.python import debug as n_debug
 
 from .node.blender import object as n_object
 from .node.blender import light as n_light
@@ -43,6 +44,7 @@ def register():
         EG_Category("EGC_PY_OPERATOR", "Operator", items=create_categories(n_operator.classes)),
         EG_Category("EGC_PY_SET", "Set", items=create_categories(n_set.classes)),
         EG_Category("EGC_PY_STRING", "String", items=create_categories(n_string.classes)),
+        EG_Category("EGC_PY_DEBUG", "Debug", items=create_categories(n_debug.classes)),
         
     ]
     blender_categories = [
