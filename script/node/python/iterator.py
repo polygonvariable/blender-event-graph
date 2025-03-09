@@ -2,12 +2,12 @@ import uuid
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_Node
-from ..base.library import add_linked_value, get_linked_value, remove_linked_value
+from ...base.node import EG_Node
+from ...base.library import add_linked_value, get_linked_value, remove_linked_value
 
-from ..socket.user import EGS_Object
-from ..socket.primitive import EGS_Value
-from ..socket.derived import EGS_Array
+from ...socket.user import EGS_Object
+from ...socket.primitive import EGS_Value
+from ...socket.derived import EGS_Array
 
 
 class EGN_ForLoop(EG_Node):
@@ -59,36 +59,27 @@ class EGN_ForEach(EG_Node):
         self.add_in(EGS_Array.bl_idname, "list")
         self.add_exec_out("loop")
         self.add_out(EGS_Value.bl_idname, "item") # bind: item -> on_item
-        self.add_out("NodeSocketInt", "index") # bind: index -> on_index
         self.add_exec_out("completed")
 
         self.inputs["list"].default_value = []
 
     def on_item(self):
         return get_linked_value(self, "item")
-    
-    def on_index(self):
-        return get_linked_value(self, "index")
 
     def execute(self):
 
         items = self.get_input_value("list")
-        index = 0
 
         for item in items:
             add_linked_value(self, "item", item)
-            add_linked_value(self, "index", index)
-            index += 1
             self.execute_next("loop")
 
         remove_linked_value(self, "item")
-        remove_linked_value(self, "index")
 
         self.execute_next("completed")
     
     def free(self):
         remove_linked_value(self, "item")
-        remove_linked_value(self, "index")
 
 
 classes = [

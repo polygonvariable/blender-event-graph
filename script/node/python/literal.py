@@ -1,10 +1,10 @@
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_PureNode
-from ..base.library import create_enum
+from ...base.node import EG_PureNode
+from ...base.library import create_enum
 
-from ..socket.derived import EGS_Vector2D, EGS_Vector4D
+from ...socket.derived import EGS_Vector2D, EGS_Vector4D
 
 
 class EGN_LiteralInteger(EG_PureNode):

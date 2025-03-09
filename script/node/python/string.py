@@ -1,11 +1,11 @@
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty )
 
-from ..base.node import EG_Node, EG_PureNode
-from ..base.library import create_enum
+from ...base.node import EG_Node, EG_PureNode
+from ...base.library import create_enum
 
-from ..socket.derived import EGS_Array
-from ..socket.primitive import EGS_Value
+from ...socket.derived import EGS_Array
+from ...socket.primitive import EGS_Value
 
 
 class PNY_AppendString(EG_PureNode):

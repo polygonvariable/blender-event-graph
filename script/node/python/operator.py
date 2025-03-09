@@ -2,9 +2,9 @@ import uuid
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_PureNode
-from ..base.library import create_enum
-from ..socket.primitive import EGS_Value
+from ...base.node import EG_PureNode
+from ...base.library import create_enum
+from ...socket.primitive import EGS_Value
 
 
 class EGN_CompareOperator(EG_PureNode):

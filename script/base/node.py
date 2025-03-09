@@ -106,7 +106,7 @@ class EG_Node(EG_PureNode):
     bl_icon = "SYSTEM"
 
     node_type = EG_NodeType.IMPURE
-    node_uuid: StringProperty(name="Node UUID", default=str(uuid.uuid4()), options={"SKIP_SAVE"}) # type: ignore
+    node_uuid: StringProperty(name="UUID", default=str(uuid.uuid4()), options={"SKIP_SAVE"}) # type: ignore
 
     def raid(self):
         self.node_uuid = str(uuid.uuid4())

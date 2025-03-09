@@ -19,6 +19,10 @@ def create_enum(items = []):
 
 variable_map = {}
 
+def flush_variables():
+    variable_map.clear()
+    print("Variables flushed")
+
 def add_variable(name, value):
     variable_map[name] = value
 

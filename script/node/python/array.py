@@ -2,18 +2,18 @@ import uuid
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_PureNode, EG_Node
-from ..base.library import create_enum, add_variable, get_variable
+from ...base.node import EG_PureNode, EG_Node
+from ...base.library import create_enum, add_variable, get_variable
 
-from ..socket.derived import EGS_Array
-from ..socket.primitive import EGS_Value
+from ...socket.derived import EGS_Array
+from ...socket.primitive import EGS_Value
 
 
 
 class EGN_MakeArray(EG_PureNode):
     """Make a new array"""
     
-    bl_idname = "EGN_Array"
+    bl_idname = "EGN_MakeArray"
     bl_label = "Make Array"
 
     def init(self, context):

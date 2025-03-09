@@ -2,13 +2,13 @@ import uuid
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_Node
-from ..base.library import create_enum, add_variable, get_variable
+from ...base.node import EG_Node
+from ...base.library import create_enum, add_variable, get_variable
 
-from ..socket.user import EGS_Object
-from ..socket.primitive import EGS_Value
+from ...socket.user import EGS_Object
+from ...socket.primitive import EGS_Value
 
-from ..operator.exec_main import EGOP_ExecuteMain
+from ...operator.exec_main import EGOP_ExecuteMain
 
 
 class EGN_Definition(EG_Node):
@@ -38,7 +38,7 @@ class EGN_Print(EG_Node):
     def init(self, context):
         super().init(context)
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "value")
+        self.add_in(EGS_Value.bl_idname, "value")
         self.add_exec_out("exec")
 
     def execute(self):
@@ -143,22 +143,6 @@ class EGN_GetVariable(EG_Node):
         return get_variable(self.name)
     
 
-class EGN_Array(EG_Node):
-    """Event Array Node"""
-    
-    bl_idname = "EGN_Array"
-    bl_label = "Make Array"
-
-    node_is_pure = True
-
-    def init(self, context):
-        self.add_in("EGS_Value", "item")
-        self.add_out("EGS_Array", "array")
-
-    def on_array(self):
-        return self.get_input_values("item")
-
-
 class EGN_OperatorAdd(EG_Node):
     """Event Operator Add Node"""
     
@@ -175,40 +159,6 @@ class EGN_OperatorAdd(EG_Node):
     def on_result(self):
         return self.get_input_value("A") + self.get_input_value("B")
     
-class EGN_ArrayAppend(EG_Node):
-    """Event Array Append Node"""
-    
-    bl_idname = "EGN_ArrayAppend"
-    bl_label = "Array Append"
-
-    node_is_pure = True
-    
-    def init(self, context):
-        self.add_in("EGS_Array", "array")
-        self.add_in("EGS_Value", "item")
-        self.add_out("EGS_Array", "array")
-
-    def on_array(self):
-        return self.get_input_value("array") + self.get_input_values("item")
-    
-class EGN_ArrayPop(EG_Node):
-    """Event Array Pop Node"""
-    
-    bl_idname = "EGN_ArrayPop"
-    bl_label = "Array Pop"
-
-    node_is_pure = True
-    
-    def init(self, context):
-        self.add_in("EGS_Array", "array")
-        self.add_out("EGS_Array", "array")
-
-    def on_array(self):
-        arr = self.get_input_value("array")
-        arr.pop()
-        return arr
-
-
 def get_graphs(self, context):
     """Dynamically fetch all graphs of type EG_NodeTree."""
     graphs = [(tree.name, tree.name, "") for tree in bpy.data.node_groups if tree.bl_idname == "EG_NodeTree"]
@@ -255,9 +205,6 @@ classes = [
     EGN_SetVariable,
     EGN_GetVariable,
     EGN_IfElse,
-    EGN_Array,
-    EGN_ArrayAppend,
-    EGN_ArrayPop,
     EGN_OperatorAdd,
     EGN_CallGraph,
 ]

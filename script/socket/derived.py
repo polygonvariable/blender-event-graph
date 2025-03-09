@@ -39,7 +39,34 @@ class EGS_Array(EG_Socket):
     bl_idname = "EGS_Array"
     bl_label = "Array"
     
-    socket_color = (0.4, 0.4, 0.4, 1.0)
+    # socket_color = (0.4, 0.4, 0.4, 1.0)
+    socket_color = (0.6, 0.2, 0.4, 1.0)
+
+    def __init__(self):
+        super().__init__()
+        self.display_shape = "SQUARE"
+
+
+class EGS_Set(EG_Socket):
+    """Wildcard Set Socket"""
+    
+    bl_idname = "EGS_Set"
+    bl_label = "Set"
+    
+    socket_color = (0.2, 0.4, 0.6, 1.0)
+
+    def __init__(self):
+        super().__init__()
+        self.display_shape = "SQUARE"
+
+
+class EGS_Map(EG_Socket):
+    """Map Socket"""
+    
+    bl_idname = "EGS_Map"
+    bl_label = "Map"
+    
+    socket_color = (0.4, 0.6, 0.2, 1.0)
 
     def __init__(self):
         super().__init__()
@@ -49,6 +76,8 @@ class EGS_Array(EG_Socket):
 classes = [
     EGS_Execute,
     EGS_Array,
+    EGS_Set,
+    EGS_Map,
     EGS_Vector2D,
     EGS_Vector4D
 ]
