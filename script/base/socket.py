@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import NodeSocket
-from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty )
+from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, FloatVectorProperty )
 
 
 class EG_Socket(NodeSocket):
@@ -16,4 +16,5 @@ class EG_Socket(NodeSocket):
 
     def draw_color(self, context, node):
         return self.socket_color
+    
     

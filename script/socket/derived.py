@@ -1,3 +1,4 @@
+
 from ..base.socket import EG_Socket
 
 
@@ -38,7 +39,7 @@ class EGS_Array(EG_Socket):
     bl_idname = "EGS_Array"
     bl_label = "Array"
     
-    socket_color = (0.98, 0.54, 0.40, 1.0)
+    socket_color = (0.4, 0.4, 0.4, 1.0)
 
     def __init__(self):
         super().__init__()

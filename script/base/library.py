@@ -29,11 +29,11 @@ def remove_variable(name):
     if name in variable_map:
         del variable_map[name]
 
-def add_variable_for_node(node, name, value):
+def add_linked_value(node, name, value):
     add_variable(f"{node.node_uuid}_{name}", value)
 
-def get_variable_for_node(node, name):
+def get_linked_value(node, name):
     return get_variable(f"{node.node_uuid}_{name}")
 
-def remove_variable_by_node(node, name):
+def remove_linked_value(node, name):
     remove_variable(f"{node.node_uuid}_{name}")

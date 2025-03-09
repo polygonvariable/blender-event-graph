@@ -7,7 +7,7 @@ class EGS_Value(EG_Socket):
     bl_idname = "EGS_Value"
     bl_label = "Value"
     
-    socket_color = (0.25, 0.52, 0.52, 1.0)
+    socket_color = (0.3, 0.3, 0.3, 1.0)
 
 
 classes = [

@@ -3,7 +3,7 @@ import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ..base.node import EG_Node
-from ..base.library import create_enum
+from ..base.library import create_enum, add_variable, get_variable
 
 from ..socket.user import EGS_Object
 from ..socket.primitive import EGS_Value
@@ -100,104 +100,6 @@ class EGN_IfElse(EG_Node):
             self.execute_next("true")
         else:
             self.execute_next("false")
-
-
-class EGN_ForLoop(EG_Node):
-    """Event For Loop Node"""
-    
-    bl_idname = "EGN_ForLoop"
-    bl_label = "For Loop"
-
-    start: IntProperty(name="Start", default=0, min=0) # type: ignore
-    end: IntProperty(name="End", default=10, min=0) # type: ignore
-
-    def init(self, context):
-        super().init(context)
-        self.add_exec_in("exec")
-        self.add_exec_out("loop")
-        self.add_out("NodeSocketInt", "index") # bind: index -> on_index
-        self.add_exec_out("completed")
-
-    def on_index(self):
-        return get_variable_for_node(self, "index")
-
-    def execute(self):
-
-        for i in range(self.start, self.end):
-            add_variable_for_node(self, "index", i)
-            self.execute_next("loop")
-
-        remove_variable_by_node(self, "index")
-        self.execute_next("completed")
-
-    def draw_buttons(self, context, layout):
-        super().draw_buttons(context, layout)
-        layout.prop(self, "start")
-        layout.prop(self, "end")
-
-
-class EGN_CompareOperator(EG_Node):
-    """Event Compare Operator Node"""
-    
-    bl_idname = "EGN_CompareOperator"
-    bl_label = "Compare Operator"
-
-    node_is_pure = True
-
-    operator: EnumProperty(
-        name="Operator",
-        items=create_enum(["<", ">", "<=", ">=", "==", "!="]),
-        default="<"
-    ) # type: ignore
-
-    def draw_buttons(self, context, layout):
-        layout.prop(self, "operator")
-
-    def init(self, context):
-        super().init(context)
-        self.add_in(EGS_Value.bl_idname, "A")
-        self.add_in(EGS_Value.bl_idname, "B")
-        self.add_out("NodeSocketBool", "result")
-
-    def on_result(self):
-        selected_operator = self.operator
-
-        if selected_operator == "<":
-            return self.get_input_value("A") < self.get_input_value("B")
-        if selected_operator == ">":
-            return self.get_input_value("A") > self.get_input_value("B")
-        if selected_operator == "<=":
-            return self.get_input_value("A") <= self.get_input_value("B")
-        if selected_operator == ">=":
-            return self.get_input_value("A") >= self.get_input_value("B")
-        if selected_operator == "==":
-            return self.get_input_value("A") == self.get_input_value("B")
-        if selected_operator == "!=":
-            return self.get_input_value("A") != self.get_input_value("B")
-
-        return False
-
-
-variable_dict = {}
-
-def add_variable(name, value):
-    variable_dict[name] = value
-
-def get_variable(name):
-    return variable_dict.get(name, None)
-
-def remove_variable(name):
-    if name in variable_dict:
-        del variable_dict[name]
-
-def add_variable_for_node(node, name, value):
-    add_variable(f"{node.node_uuid}_{name}", value)
-
-def get_variable_for_node(node, name):
-    return get_variable(f"{node.node_uuid}_{name}")
-
-def remove_variable_by_node(node, name):
-    remove_variable(f"{node.node_uuid}_{name}")
 
 class EGN_SetVariable(EG_Node):
     """Event Set Variable Node"""
@@ -350,11 +252,9 @@ classes = [
     EGN_Definition,
     EGN_Print,
     EGN_Math,
-    EGN_CompareOperator,
     EGN_SetVariable,
     EGN_GetVariable,
     EGN_IfElse,
-    EGN_ForLoop,
     EGN_Array,
     EGN_ArrayAppend,
     EGN_ArrayPop,

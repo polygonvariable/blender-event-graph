@@ -1,19 +1,17 @@
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
-from ..base.node import EG_Node
+from ..base.node import EG_PureNode
 from ..base.library import create_enum
 
 from ..socket.derived import EGS_Vector2D, EGS_Vector4D
 
 
-class EGN_LiteralInteger(EG_Node):
+class EGN_LiteralInteger(EG_PureNode):
     """Event Literal Integer Node"""
     
     bl_idname = "EGN_LiteralInteger"
     bl_label = "Literal Integer"
-
-    node_is_pure = True
 
     value: IntProperty(name="Value") # type: ignore
 
@@ -27,13 +25,11 @@ class EGN_LiteralInteger(EG_Node):
         layout.prop(self, "value")
 
 
-class EGN_LiteralFloat(EG_Node):
+class EGN_LiteralFloat(EG_PureNode):
     """Event Literal Float Node"""
     
     bl_idname = "EGN_LiteralFloat"
     bl_label = "Literal Float"
-
-    node_is_pure = True
 
     value: FloatProperty(name="Value") # type: ignore
 
@@ -47,13 +43,11 @@ class EGN_LiteralFloat(EG_Node):
         layout.prop(self, "value")
 
 
-class EGN_LiteralColor(EG_Node):
+class EGN_LiteralColor(EG_PureNode):
     """Event Literal Color Node"""
     
     bl_idname = "EGN_LiteralColor"
     bl_label = "Literal Color"
-
-    node_is_pure = True
 
     value: FloatVectorProperty(
         name="Value",
@@ -74,13 +68,11 @@ class EGN_LiteralColor(EG_Node):
         layout.prop(self, "value")
 
 
-class EGN_LiteralString(EG_Node):
+class EGN_LiteralString(EG_PureNode):
     """Event Literal String Node"""
     
     bl_idname = "EGN_LiteralString"
     bl_label = "Literal String"
-
-    node_is_pure = True
 
     value: StringProperty(name="Value") # type: ignore
 
@@ -94,13 +86,11 @@ class EGN_LiteralString(EG_Node):
         layout.prop(self, "value")
 
 
-class EGN_LiteralBoolean(EG_Node):
+class EGN_LiteralBoolean(EG_PureNode):
     """Event Literal Boolean Node"""
     
     bl_idname = "EGN_LiteralBoolean"
     bl_label = "Literal Boolean"
-
-    node_is_pure = True
 
     value: BoolProperty(name="Value") # type: ignore
 
@@ -114,13 +104,11 @@ class EGN_LiteralBoolean(EG_Node):
         layout.prop(self, "value")
 
 
-class PNY_Break2D(EG_Node):
-    """Event Break 2D Node"""
+class PNY_Break2D(EG_PureNode):
+    """Event Break 2D Vector Node"""
     
     bl_idname = "PNY_Break2D"
-    bl_label = "Break 2D"
-
-    node_is_pure = True
+    bl_label = "Break 2D Vector"
 
     def init(self, context):
         self.add_in(EGS_Vector2D.bl_idname, "vector")
@@ -134,13 +122,11 @@ class PNY_Break2D(EG_Node):
         return self.get_input_value("vector")[1]
     
 
-class PNY_Break3D(EG_Node):
-    """Event Break 3D Node"""
+class PNY_Break3D(EG_PureNode):
+    """Event Break 3D Vector Node"""
     
     bl_idname = "PNY_Break3D"
-    bl_label = "Break 3D"
-
-    node_is_pure = True
+    bl_label = "Break 3D Vector"
 
     def init(self, context):
         self.add_in("NodeSocketVector", "vector")
@@ -158,13 +144,11 @@ class PNY_Break3D(EG_Node):
         return self.get_input_value("vector")[2]
 
 
-class PNY_Break4D(EG_Node):
-    """Event Break 4D Node"""
+class PNY_Break4D(EG_PureNode):
+    """Event Break 4D Vector Node"""
     
     bl_idname = "PNY_Break4D"
-    bl_label = "Break 4D"
-
-    node_is_pure = True
+    bl_label = "Break 4D Vector"
 
     def init(self, context):
         self.add_in(EGS_Vector4D.bl_idname, "vector")
@@ -185,13 +169,11 @@ class PNY_Break4D(EG_Node):
     def on_w(self):
         return self.get_input_value("vector")[3]
     
-class PNY_Make2D(EG_Node):
-    """Event Make 2D Node"""
+class PNY_Make2D(EG_PureNode):
+    """Event Make 2D Vector Node"""
     
     bl_idname = "PNY_Make2D"
-    bl_label = "Make 2D"
-
-    node_is_pure = True
+    bl_label = "Make 2D Vector"
 
     def init(self, context):
         self.add_in("NodeSocketFloat", "x", 1, False)
@@ -204,13 +186,11 @@ class PNY_Make2D(EG_Node):
         return [x, y]
     
 
-class PNY_Make3D(EG_Node):
-    """Event Make 3D Node"""
+class PNY_Make3D(EG_PureNode):
+    """Event Make 3D Vector Node"""
     
     bl_idname = "PNY_Make3D"
-    bl_label = "Make 3D"
-
-    node_is_pure = True
+    bl_label = "Make 3D Vector"
 
     def init(self, context):
         self.add_in("NodeSocketFloat", "x", 1, False)
@@ -225,13 +205,11 @@ class PNY_Make3D(EG_Node):
         return [x, y, z]
     
 
-class PNY_Make4D(EG_Node):
-    """Event Make 4D Node"""
+class PNY_Make4D(EG_PureNode):
+    """Event Make 4D Vector Node"""
     
     bl_idname = "PNY_Make4D"
-    bl_label = "Make 4D"
-
-    node_is_pure = True
+    bl_label = "Make 4D Vector"
 
     def init(self, context):
         self.add_in("NodeSocketFloat", "x", 1, False)

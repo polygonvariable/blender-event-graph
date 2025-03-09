@@ -16,23 +16,19 @@ class EG_PureNode(bpy.types.Node):
 
     bl_idname = "EG_PureNode"
     bl_label = "Pure Node"
-    bl_icon = "MOD_PARTICLE_INSTANCE"
+    bl_icon = "MOD_PHYSICS"
     bl_width_default = 180
     
-
     node_type = EG_NodeType.PURE
-
 
     def add_in(self, socket_type, name = "in", limit = 1, hide_value=True):
         pin = self.inputs.new(socket_type, name)
         pin.link_limit = limit
         pin.hide_value = hide_value
 
-
     def add_out(self, socket_type, name = "out", limit = 100):
         pin = self.outputs.new(socket_type, name)
         pin.link_limit = limit
-
 
     def get_input_value(self, name):
         
@@ -63,7 +59,6 @@ class EG_PureNode(bpy.types.Node):
                 return input_socket.default_value
             
         return None
-
 
     def get_input_values(self, name):
         
@@ -110,30 +105,23 @@ class EG_Node(EG_PureNode):
     bl_label = "Impure Node"
     bl_icon = "SYSTEM"
 
-
     node_type = EG_NodeType.IMPURE
     node_uuid: StringProperty(name="Node UUID", default=str(uuid.uuid4()), options={"SKIP_SAVE"}) # type: ignore
-
 
     def raid(self):
         self.node_uuid = str(uuid.uuid4())
 
-
     def init(self, context):
         self.raid()
-
 
     def draw_buttons(self, context, layout):
         layout.prop(self, "node_uuid")
 
-
     def add_exec_in(self, name = "in"):
         self.add_in(EGS_Execute.bl_idname, name, 100, True)
 
-
     def add_exec_out(self, name = "out"):
         self.add_out(EGS_Execute.bl_idname, name, 1)
-
 
     def execute_next(self, name):
 
@@ -149,7 +137,6 @@ class EG_Node(EG_PureNode):
 
                 target_node.__execute__()
     
-
     def execute_previous(self, name):
 
         # Get input socket and check if its valid
@@ -164,7 +151,6 @@ class EG_Node(EG_PureNode):
 
                 source_node.__execute__()
 
-
     def __execute__(self):
 
         try:
@@ -177,7 +163,6 @@ class EG_Node(EG_PureNode):
         except Exception as e:
             print(e)
 
-
     def before_execute(self):
 
         # Generate unique node uuid when its about to be executed
@@ -185,7 +170,6 @@ class EG_Node(EG_PureNode):
         self.raid()
 
         return True
-
 
     def execute(self):
         return ""

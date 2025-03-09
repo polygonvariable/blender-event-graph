@@ -4,6 +4,7 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 from ..base.node import EG_Node, EG_PureNode
 from ..base.library import create_enum
 
+from ..socket.derived import EGS_Array
 from ..socket.primitive import EGS_Value
 
 
@@ -290,9 +291,9 @@ class PNY_SplitString(EG_PureNode):
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
         self.add_in("NodeSocketString", "separator", 1, False)
-        self.add_out("NodeSocketString", "result") # bind: result -> on_result
+        self.add_out(EGS_Array.bl_idname, "array") # bind: array -> on_array
 
-    def on_result(self):
+    def on_array(self):
         source = str(self.get_input_value("source"))
         separator = str(self.get_input_value("separator"))
         return source.split(separator)
