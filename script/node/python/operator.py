@@ -7,10 +7,50 @@ from ...base.library import create_enum
 from ...socket.primitive import EGS_Value
 
 
+class EGN_ArithmeticOperator(EG_PureNode):
+    """Node to perform arithmetic operations"""
+    
+    bl_idname = "egn.python.arithmetic_operator"
+    bl_label = "Arithmetic Operator"
+
+    operator: EnumProperty(
+        name="Operator",
+        items=create_enum(["+", "-", "*", "/"]),
+        default="+"
+    ) # type: ignore
+
+    def draw_buttons(self, context, layout):
+        layout.prop(self, "operator")
+
+    def init(self, context):
+        self.add_in(EGS_Value.bl_idname, "a")
+        self.add_in(EGS_Value.bl_idname, "b")
+        self.add_out(EGS_Value.bl_idname, "result") # result is linked to on_result
+
+    def on_result(self):
+        in_a = self.get_input_value("a")
+        in_b = self.get_input_value("b")
+        in_operator = self.operator
+
+        if in_operator == "+":
+            return in_a + in_b
+        
+        if in_operator == "-":
+            return in_a - in_b
+        
+        if in_operator == "*":
+            return in_a * in_b
+        
+        if in_operator == "/":
+            return in_a / in_b
+
+        return 0
+
+
 class EGN_CompareOperator(EG_PureNode):
     """Event Compare Operator Node"""
     
-    bl_idname = "EGN_CompareOperator"
+    bl_idname = "egn.python.compare_operator"
     bl_label = "Compare Operator"
 
     operator: EnumProperty(
@@ -56,7 +96,7 @@ class EGN_CompareOperator(EG_PureNode):
 class EGN_LogicalAndOperator(EG_PureNode):
     """Logical And Operator Node"""
     
-    bl_idname = "EGN_LogicalAndOperator"
+    bl_idname = "egn.python.logical_and_operator"
     bl_label = "And"
 
     def init(self, context):
@@ -74,7 +114,7 @@ class EGN_LogicalAndOperator(EG_PureNode):
 class EGN_LogicalOrOperator(EG_PureNode):
     """Logical Or Operator Node"""
     
-    bl_idname = "EGN_LogicalOrOperator"
+    bl_idname = "egn.python.logical_or_operator"
     bl_label = "Or"
 
     def init(self, context):
@@ -92,7 +132,7 @@ class EGN_LogicalOrOperator(EG_PureNode):
 class EGN_LogicalNotOperator(EG_PureNode):
     """Logical Not Operator Node"""
     
-    bl_idname = "EGN_LogicalNotOperator"
+    bl_idname = "egn.python.logical_not_operator"
     bl_label = "Not"
 
     def init(self, context):
@@ -107,7 +147,7 @@ class EGN_LogicalNotOperator(EG_PureNode):
 class EGN_IdentityOperator(EG_PureNode):
     """Identity Operator Node"""
     
-    bl_idname = "EGN_IdentityOperator"
+    bl_idname = "egn.python.identity_operator"
     bl_label = "Identity Comparison"
 
     operator: EnumProperty(
@@ -140,7 +180,7 @@ class EGN_IdentityOperator(EG_PureNode):
 class EGN_MembershipOperator(EG_PureNode):
     """Membership Operator Node"""
     
-    bl_idname = "EGN_MembershipOperator"
+    bl_idname = "egn.python.membership_operator"
     bl_label = "Membership Check"
 
     operator: EnumProperty(
@@ -173,7 +213,7 @@ class EGN_MembershipOperator(EG_PureNode):
 class EGN_IsNone(EG_PureNode):
     """Check if value is None"""
     
-    bl_idname = "EGN_IsNone"
+    bl_idname = "egn.python.is_none"
     bl_label = "Is None"
 
     def init(self, context):
@@ -186,6 +226,7 @@ class EGN_IsNone(EG_PureNode):
 
 
 classes = [
+    EGN_ArithmeticOperator,
     EGN_CompareOperator,
     EGN_LogicalAndOperator,
     EGN_LogicalOrOperator,

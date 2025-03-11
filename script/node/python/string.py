@@ -8,10 +8,10 @@ from ...socket.derived import EGS_Array
 from ...socket.primitive import EGS_Value
 
 
-class PNY_AppendString(EG_PureNode):
+class EGN_AppendString(EG_PureNode):
     """Node to append strings"""
     
-    bl_idname = "PNY_AppendString"
+    bl_idname = "egn.python.append_string"
     bl_label = "Append"
 
     def init(self, context):
@@ -23,10 +23,10 @@ class PNY_AppendString(EG_PureNode):
         return str(self.get_input_value("a")) + str(self.get_input_value("b"))
 
 
-class PNY_ContainString(EG_PureNode):
+class EGN_ContainString(EG_PureNode):
     """Node to check if a string contains another string"""
     
-    bl_idname = "PNY_ContainString"
+    bl_idname = "egn.python.contain_string"
     bl_label = "Contains"
 
     def init(self, context):
@@ -40,10 +40,10 @@ class PNY_ContainString(EG_PureNode):
         return match in source
 
 
-class PNY_SliceString(EG_PureNode):
+class EGN_SliceString(EG_PureNode):
     """Node to slice a string"""
     
-    bl_idname = "PNY_SliceString"
+    bl_idname = "egn.python.slice_string"
     bl_label = "Slice"
 
     def init(self, context):
@@ -59,10 +59,10 @@ class PNY_SliceString(EG_PureNode):
         return source[start:end]
 
 
-class PNY_SliceFromStart(EG_PureNode):
+class EGN_SliceFromStartString(EG_PureNode):
     """Node to slice a string from start"""
     
-    bl_idname = "PNY_SliceFromStart"
+    bl_idname = "egn.python.slice_from_start_string"
     bl_label = "Slice From Start"
 
     def init(self, context):
@@ -76,10 +76,10 @@ class PNY_SliceFromStart(EG_PureNode):
         return source[:start]
 
 
-class PNY_SliceFromEnd(EG_PureNode):
+class EGN_SliceFromEndString(EG_PureNode):
     """Node to slice a string from end"""
     
-    bl_idname = "PNY_SliceFromEnd"
+    bl_idname = "egn.python.slice_from_end_string"
     bl_label = "Slice From End"
 
     def init(self, context):
@@ -93,10 +93,10 @@ class PNY_SliceFromEnd(EG_PureNode):
         return source[end:]
 
 
-class PNY_ToUpper(EG_PureNode):
+class EGN_ToUpperString(EG_PureNode):
     """Node to convert a string to upper case"""
     
-    bl_idname = "PNY_ToUpper"
+    bl_idname = "egn.python.to_upper_string"
     bl_label = "To Upper"
 
     def init(self, context):
@@ -108,11 +108,11 @@ class PNY_ToUpper(EG_PureNode):
         return source.upper()
 
 
-class PNY_ToLower(EG_PureNode):
+class EGN_ToLowerString(EG_PureNode):
     """Node to convert a string to lower case"""
     
-    bl_idname = "PNY_ToLower"
-    bl_label = "To lower"
+    bl_idname = "egn.python.to_lower_string"
+    bl_label = "To Lower"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -123,10 +123,10 @@ class PNY_ToLower(EG_PureNode):
         return source.lower()
 
 
-class PNY_CapitalizeString(EG_PureNode):
+class EGN_CapitalizeString(EG_PureNode):
     """Node to capitalize a string"""
     
-    bl_idname = "PNY_CapitalizeString"
+    bl_idname = "egn.python.capitalize_string"
     bl_label = "Capitalize"
 
     def init(self, context):
@@ -138,10 +138,10 @@ class PNY_CapitalizeString(EG_PureNode):
         return source.capitalize()
 
 
-class PNY_CasefoldString(EG_PureNode):
+class EGN_CasefoldString(EG_PureNode):
     """Node to casefold a string"""
     
-    bl_idname = "PNY_CasefoldString"
+    bl_idname = "egn.python.casefold_string"
     bl_label = "Casefold"
 
     def init(self, context):
@@ -153,10 +153,10 @@ class PNY_CasefoldString(EG_PureNode):
         return source.casefold()
 
 
-class PNY_CountString(EG_PureNode):
+class EGN_CountString(EG_PureNode):
     """Node to count a string"""
     
-    bl_idname = "PNY_CountString"
+    bl_idname = "egn.python.count_string"
     bl_label = "Count"
 
     def init(self, context):
@@ -170,10 +170,10 @@ class PNY_CountString(EG_PureNode):
         return source.count(match)
 
 
-class PNY_EndsWithString(EG_PureNode):
+class EGN_EndsWithString(EG_PureNode):
     """Node to check if a string ends with another string"""
     
-    bl_idname = "PNY_EndsWithString"
+    bl_idname = "egn.python.ends_with_string"
     bl_label = "Ends With"
 
     def init(self, context):
@@ -187,10 +187,10 @@ class PNY_EndsWithString(EG_PureNode):
         return source.endswith(match)
 
 
-class PNY_FindString(EG_PureNode):
+class EGN_FindString(EG_PureNode):
     """Node to get index of a string"""
     
-    bl_idname = "PNY_FindString"
+    bl_idname = "egn.python.find_string"
     bl_label = "Find"
 
     def init(self, context):
@@ -204,10 +204,10 @@ class PNY_FindString(EG_PureNode):
         return source.find(match)
 
 
-class PNY_IndexString(EG_PureNode):
+class EGN_IndexString(EG_PureNode):
     """Node to get index of a string"""
     
-    bl_idname = "PNY_IndexString"
+    bl_idname = "egn.python.index_string"
     bl_label = "Index Of"
 
     def init(self, context):
@@ -221,10 +221,10 @@ class PNY_IndexString(EG_PureNode):
         return source.index(match)
 
 
-class PNY_IsAString(EG_PureNode):
+class EGN_IsAString(EG_PureNode):
     """Node to check if a string is an instance of another string"""
     
-    bl_idname = "PNY_IsAString"
+    bl_idname = "egn.python.is_a_string"
     bl_label = "Is A"
 
     condition: EnumProperty(
@@ -267,10 +267,11 @@ class PNY_IsAString(EG_PureNode):
 
         return result
 
-class PNY_StripString(EG_PureNode):
+
+class EGN_StripString(EG_PureNode):
     """Node to remove spaces from a string"""
     
-    bl_idname = "PNY_StripString"
+    bl_idname = "egn.python.strip_string"
     bl_label = "Strip"
 
     def init(self, context):
@@ -282,10 +283,10 @@ class PNY_StripString(EG_PureNode):
         return source.strip()
 
 
-class PNY_SplitString(EG_PureNode):
+class EGN_SplitString(EG_PureNode):
     """Node to split a string"""
     
-    bl_idname = "PNY_SplitString"
+    bl_idname = "egn.python.split_string"
     bl_label = "Split"
 
     def init(self, context):
@@ -299,10 +300,10 @@ class PNY_SplitString(EG_PureNode):
         return source.split(separator)
 
 
-class PNY_ReplaceString(EG_PureNode):
+class EGN_ReplaceString(EG_PureNode):
     """Node to replace strings"""
     
-    bl_idname = "PNY_ReplaceString"
+    bl_idname = "egn.python.replace_string"
     bl_label = "Replace"
 
     def init(self, context):
@@ -319,21 +320,21 @@ class PNY_ReplaceString(EG_PureNode):
 
 
 classes = [
-    PNY_AppendString,
-    PNY_ReplaceString,
-    PNY_ContainString,
-    PNY_ToUpper,
-    PNY_ToLower,
-    PNY_SliceString,
-    PNY_SliceFromStart,
-    PNY_SliceFromEnd,
-    PNY_CapitalizeString,
-    PNY_CasefoldString,
-    PNY_CountString,
-    PNY_EndsWithString,
-    PNY_FindString,
-    PNY_IndexString,
-    PNY_IsAString,
-    PNY_StripString,
-    PNY_SplitString,
+    EGN_AppendString,
+    EGN_ReplaceString,
+    EGN_ContainString,
+    EGN_ToUpperString,
+    EGN_ToLowerString,
+    EGN_SliceString,
+    EGN_SliceFromStartString,
+    EGN_SliceFromEndString,
+    EGN_CapitalizeString,
+    EGN_CasefoldString,
+    EGN_CountString,
+    EGN_EndsWithString,
+    EGN_FindString,
+    EGN_IndexString,
+    EGN_IsAString,
+    EGN_StripString,
+    EGN_SplitString,
 ]

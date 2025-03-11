@@ -21,27 +21,27 @@ def is_objectId_valid(object_Id):
     return object_Id is not None and object_Id in bpy.data.objects
 
 
-variable_map = {}
+cache_map = {}
 
-def flush_variables():
-    variable_map.clear()
-    print("Variables flushed")
+def flush_cache():
+    cache_map.clear()
+    print("Cache flushed")
 
-def add_variable(name, value):
-    variable_map[name] = value
+def add_cache(name, value):
+    cache_map[name] = value
 
-def get_variable(name):
-    return variable_map.get(name, None)
+def get_cache(name):
+    return cache_map.get(name, None)
 
-def remove_variable(name):
-    if name in variable_map:
-        del variable_map[name]
+def remove_cache(name):
+    if name in cache_map:
+        del cache_map[name]
 
-def add_linked_value(node, name, value):
-    add_variable(f"{node.node_uuid}_{name}", value)
+def add_linked_cache(node, name, value):
+    add_cache(f"{node.node_uuid}_{name}", value)
 
-def get_linked_value(node, name):
-    return get_variable(f"{node.node_uuid}_{name}")
+def get_linked_cache(node, name):
+    return get_cache(f"{node.node_uuid}_{name}")
 
-def remove_linked_value(node, name):
-    remove_variable(f"{node.node_uuid}_{name}")
+def remove_linked_cache(node, name):
+    remove_cache(f"{node.node_uuid}_{name}")

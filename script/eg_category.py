@@ -6,13 +6,15 @@ from .node.python import cast as n_cast
 from .node.python import literal as n_literal
 from .node.python import string as n_string
 from .node.python import operator as n_operator
-from .node.python import iterator as n_iterator
+from .node.python import flow as n_flow
 from .node.python import array as n_array
 from .node.python import set as n_set
 from .node.python import map as n_map
-from .node.python import debug as n_debug
+from .node.python import utility as n_utility
+from .node.python import cache as n_cache
 
 from .node.blender import object as n_object
+from .node.blender import mesh as n_mesh
 from .node.blender import light as n_light
 
 
@@ -35,28 +37,30 @@ def create_categories(classes):
 def register():
     python_categories = [
         
-        EG_Category("EGC_PY_ARRAY", "Array", items=create_categories(n_array.classes)),
-        EG_Category("EGC_PY_BASE", "Base", items=create_categories(n_base.classes)),
-        EG_Category("EGC_PY_CAST", "Cast", items=create_categories(n_cast.classes)),
-        EG_Category("EGC_PY_ITERATOR", "Iterator", items=create_categories(n_iterator.classes)),
-        EG_Category("EGC_PY_LITERAL", "Literal", items=create_categories(n_literal.classes)),
-        EG_Category("EGC_PY_MAP", "Map", items=create_categories(n_map.classes)),
-        EG_Category("EGC_PY_OPERATOR", "Operator", items=create_categories(n_operator.classes)),
-        EG_Category("EGC_PY_SET", "Set", items=create_categories(n_set.classes)),
-        EG_Category("EGC_PY_STRING", "String", items=create_categories(n_string.classes)),
-        EG_Category("EGC_PY_DEBUG", "Debug", items=create_categories(n_debug.classes)),
+        EG_Category("egc_py_array", "Array", items=create_categories(n_array.classes)),
+        EG_Category("egc_py_base", "Base", items=create_categories(n_base.classes)),
+        EG_Category("egc_py_cache", "Cache", items=create_categories(n_cache.classes)),
+        EG_Category("egc_py_cast", "Cast", items=create_categories(n_cast.classes)),
+        EG_Category("egc_py_flow", "Flow", items=create_categories(n_flow.classes)),
+        EG_Category("egc_py_literal", "Literal", items=create_categories(n_literal.classes)),
+        EG_Category("egc_py_map", "Map", items=create_categories(n_map.classes)),
+        EG_Category("egc_py_operator", "Operator", items=create_categories(n_operator.classes)),
+        EG_Category("egc_py_set", "Set", items=create_categories(n_set.classes)),
+        EG_Category("egc_py_string", "String", items=create_categories(n_string.classes)),
+        EG_Category("egc_py_utility", "Utility", items=create_categories(n_utility.classes)),
         
     ]
     blender_categories = [
         
-        EG_Category("EGC_BPY_LIGHT", "* Light", items=create_categories(n_light.classes)),
-        EG_Category("EGC_BPY_OBJECT", "* Object", items=create_categories(n_object.classes)),
+        EG_Category("egc_npy_light", "* Light", items=create_categories(n_light.classes)),
+        EG_Category("egc_npy_object", "* Object", items=create_categories(n_object.classes)),
+        EG_Category("egc_npy_mesh", "* Mesh", items=create_categories(n_mesh.classes)),
         
     ]
-    register_node_categories("EG_PYTHON_CATEGORIES", python_categories)
-    register_node_categories("EG_BLENDER_CATEGORIES", blender_categories)
+    register_node_categories("egc_py", python_categories)
+    register_node_categories("egc_bpy", blender_categories)
 
 
 def unregister():
-    unregister_node_categories("EG_PYTHON_CATEGORIES")
-    unregister_node_categories("EG_BLENDER_CATEGORIES")
+    unregister_node_categories("egc_py")
+    unregister_node_categories("egc_bpy")

@@ -1,9 +1,7 @@
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty )
 
-from ...base.node import EG_Node, EG_PureNode
-from ...base.library import create_enum
-
+from ...base.node import EG_PureNode
 from ...socket.derived import EGS_Array, EGS_Set
 from ...socket.primitive import EGS_Value
 
@@ -11,49 +9,49 @@ from ...socket.primitive import EGS_Value
 class PNY_ToFloat(EG_PureNode):
     """Event To Float Node"""
     
-    bl_idname = "PNY_ToFloat"
+    bl_idname = "egn.python.to_float"
     bl_label = "To Float"
 
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")
-        self.add_out("NodeSocketFloat", "result") # bind: result -> on_result
+        self.add_out("NodeSocketFloat", "float") # bind: float -> on_float
 
-    def on_result(self):
+    def on_float(self):
         return float(self.get_input_value("wildcard"))
 
 
 class PNY_ToInteger(EG_PureNode):
     """Event To Integer Node"""
     
-    bl_idname = "PNY_ToInteger"
+    bl_idname = "egn.python.to_integer"
     bl_label = "To Integer"
 
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")
-        self.add_out("NodeSocketInt", "result") # bind: result -> on_result
+        self.add_out("NodeSocketInt", "int") # bind: int -> on_int
 
-    def on_result(self):
+    def on_int(self):
         return int(self.get_input_value("value"))
 
 
 class PNY_ToString(EG_PureNode):
     """Event To String Node"""
     
-    bl_idname = "PNY_ToString"
+    bl_idname = "egn.python.to_string"
     bl_label = "To String"
 
     def init(self, context):
         self.add_in(EGS_Value.bl_idname, "value")
-        self.add_out("NodeSocketString", "result") # bind: result -> on_result
+        self.add_out("NodeSocketString", "string") # bind: string -> on_string
 
-    def on_result(self):
+    def on_string(self):
         return str(self.get_input_value("value"))
 
 
 class PNY_ArrayToSet(EG_PureNode):
     """Convert Array To Set Node"""
     
-    bl_idname = "PNY_ArrayToSet"
+    bl_idname = "egn.python.array_to_set"
     bl_label = "Array To Set"
 
     def init(self, context):
@@ -68,7 +66,7 @@ class PNY_ArrayToSet(EG_PureNode):
 class PNY_SetToArray(EG_PureNode):
     """Convert Set To Array Node"""
     
-    bl_idname = "PNY_SetToArray"
+    bl_idname = "egn.python.set_to_array"
     bl_label = "Set To Array"
 
     def init(self, context):
@@ -83,7 +81,6 @@ class PNY_SetToArray(EG_PureNode):
 classes = [
     PNY_ToInteger,
     PNY_ToString,
-    
     PNY_ToFloat,
     PNY_ArrayToSet,
     PNY_SetToArray,

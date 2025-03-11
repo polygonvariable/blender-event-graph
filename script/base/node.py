@@ -3,7 +3,7 @@ import bpy
 from bpy.props import ( StringProperty )
 from enum import Enum
 
-from ..socket.derived import EGS_Execute
+from ..socket.derived import EGS_Execute, EGS_Callback
 
 
 class EG_NodeType(Enum):
@@ -14,20 +14,28 @@ class EG_NodeType(Enum):
 class EG_PureNode(bpy.types.Node):
     """Pure node doesnt have execute socket"""
 
-    bl_idname = "EG_PureNode"
+    bl_idname = "eg.pure_node"
     bl_label = "Pure Node"
     bl_icon = "MOD_PHYSICS"
     bl_width_default = 180
     
     node_type = EG_NodeType.PURE
 
-    def add_in(self, socket_type, name = "in", limit = 1, hide_value=True):
-        pin = self.inputs.new(socket_type, name)
+    def add_in(self, socket, name = "in", limit = 1, hide_value=True, default=None):
+        pin = self.inputs.new(socket, name)
         pin.link_limit = limit
         pin.hide_value = hide_value
+        if default is not None:
+            pin.default_value = default
 
-    def add_out(self, socket_type, name = "out", limit = 100):
-        pin = self.outputs.new(socket_type, name)
+    def rem_in(self, name):
+        self.inputs.remove(self.inputs[name])
+
+    def rem_out(self, name):
+        self.outputs.remove(self.outputs[name])
+
+    def add_out(self, socket, name = "out", limit = 100):
+        pin = self.outputs.new(socket, name)
         pin.link_limit = limit
 
     def get_input_value(self, name):
@@ -101,12 +109,12 @@ class EG_PureNode(bpy.types.Node):
 class EG_Node(EG_PureNode):
     """Event Node"""
 
-    bl_idname = "EG_ImpureNode"
+    bl_idname = "eg.node"
     bl_label = "Impure Node"
     bl_icon = "SYSTEM"
 
     node_type = EG_NodeType.IMPURE
-    node_uuid: StringProperty(name="UUID", default=str(uuid.uuid4()), options={"SKIP_SAVE"}) # type: ignore
+    node_uuid: StringProperty(name="UUID", default=str(uuid.uuid4()), options={"HIDDEN"}) # type: ignore
 
     def raid(self):
         self.node_uuid = str(uuid.uuid4())
@@ -117,11 +125,17 @@ class EG_Node(EG_PureNode):
     def draw_buttons(self, context, layout):
         layout.prop(self, "node_uuid")
 
-    def add_exec_in(self, name = "in"):
-        self.add_in(EGS_Execute.bl_idname, name, 100, True)
+    def add_exec_in(self, name = "in", is_callback = False):
+        if not is_callback:
+            self.add_in(EGS_Execute.bl_idname, name, 100, True)
+        else:
+            self.add_in(EGS_Callback.bl_idname, name, 1, True)
 
-    def add_exec_out(self, name = "out"):
-        self.add_out(EGS_Execute.bl_idname, name, 1)
+    def add_exec_out(self, name = "out", is_callback = False):
+        if not is_callback:
+            self.add_out(EGS_Execute.bl_idname, name, 1)
+        else:
+            self.add_out(EGS_Callback.bl_idname, name, 100)
 
     def execute_next(self, name):
 

@@ -2,7 +2,7 @@ import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ...base.node import EG_Node
-from ...base.library import create_enum
+from ...base.library import get_linked_cache, remove_linked_cache, add_linked_cache
 
 from ...socket.primitive import EGS_Value
 
@@ -10,7 +10,7 @@ from ...socket.primitive import EGS_Value
 class EGN_CreateLight(EG_Node):
     """Creates a Light and returns its data and object Ids"""
     
-    bl_idname = "EGN_CreateLight"
+    bl_idname = "egn.light.create"
     bl_label = "Create Light"
     bl_icon = "LIGHT"
     bl_width_default = 200
@@ -97,7 +97,7 @@ class EGN_CreateLight(EG_Node):
 class EGN_GetIntensity(EG_Node):
     """Get the intensity of a light"""
     
-    bl_idname = "EGN_GetIntensity"
+    bl_idname = "egn.light.get_intensity"
     bl_label = "Get Intensity"
     bl_icon = "LIGHT"
 
@@ -118,7 +118,7 @@ class EGN_GetIntensity(EG_Node):
 class EGN_SetIntensity(EG_Node):
     """Set the intensity of a light"""
     
-    bl_idname = "EGN_SetIntensity"
+    bl_idname = "egn.light.set_intensity"
     bl_label = "Set Intensity"
     bl_icon = "LIGHT"
 
@@ -127,27 +127,35 @@ class EGN_SetIntensity(EG_Node):
         self.add_in("NodeSocketString", "data Id", 1, False)
         self.add_in("NodeSocketFloat", "intensity", 1, False)
         self.add_exec_out("exec")
+        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
 
         self.inputs["intensity"].default_value = 1.0
+
+    def on_changed(self):
+        return get_linked_cache(self, "changed")
 
     def execute(self):
         in_dataId = self.get_input_value("data Id")
         in_intensity = self.get_input_value("intensity")
+        out_changed = False
 
         light_data = bpy.data.lights.get(in_dataId)
 
         if light_data:
             light_data.energy = in_intensity
-        else:
-            print("Light data not found")
+            out_changed = True
 
+        add_linked_cache(self, "changed", out_changed)
         self.execute_next("exec")
+
+    def free(self):
+        remove_linked_cache(self, "changed")
 
 
 class EGN_GetColor(EG_Node):
     """Get the color of a light"""
     
-    bl_idname = "EGN_GetColor"
+    bl_idname = "egn.light.get_color"
     bl_label = "Get Color"
     bl_icon = "LIGHT"
 
@@ -168,7 +176,7 @@ class EGN_GetColor(EG_Node):
 class EGN_SetColor(EG_Node):
     """Set the color of a light"""
     
-    bl_idname = "EGN_SetColor"
+    bl_idname = "egn.light.set_color"
     bl_label = "Set Color"
     bl_icon = "LIGHT"
 
@@ -177,20 +185,27 @@ class EGN_SetColor(EG_Node):
         self.add_in("NodeSocketString", "data Id", 1, False)
         self.add_in("NodeSocketColor", "color", 1, False)
         self.add_exec_out("exec")
+        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
+
+    def on_changed(self):
+        return get_linked_cache(self, "changed")
 
     def execute(self):
         in_dataId = self.get_input_value("data Id")
         in_color = self.get_input_value("color")
+        out_changed = False
 
         light_data = bpy.data.lights.get(in_dataId)
 
         if light_data:
             light_data.color = in_color[:3]
-        else:
-            print("Light data not found")
+            out_changed = True
 
+        add_linked_cache(self, "changed", out_changed)
         self.execute_next("exec")
 
+    def free(self):
+        remove_linked_cache(self, "changed")
 
 classes = [
     EGN_CreateLight,

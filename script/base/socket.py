@@ -1,12 +1,12 @@
 import bpy
-from bpy.types import NodeSocket
+from bpy.types import NodeSocket, NodeSocketStandard
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, FloatVectorProperty )
 
 
 class EG_Socket(NodeSocket):
     """Event Socket"""
 
-    bl_idname = "EG_Socket"
+    bl_idname = "eg.socket"
     bl_label = "Event Socket"
 
     socket_color = (1.0, 1.0, 1.0, 1.0)
