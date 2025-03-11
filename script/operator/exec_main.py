@@ -11,7 +11,7 @@ class EGOP_ExecuteMain(bpy.types.Operator):
 
     def execute(self, context):
         node = context.active_node
-        if node and node.bl_idname == "egn.python.function":
+        if node and node.bl_idname == "egn_python_function":
 
             # clear the old variables before executing
             # to prevent duplication
@@ -19,8 +19,10 @@ class EGOP_ExecuteMain(bpy.types.Operator):
             result = node.execute()
             
             self.report({"INFO"}, f"Output Node Result: {result}")
+            
         else:
             self.report({"WARNING"}, "Active node is not an define node")
+
         return {"FINISHED"}
 
 

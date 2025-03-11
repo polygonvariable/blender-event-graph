@@ -12,7 +12,7 @@ from ...socket.primitive import EGS_Value
 class EGN_MakeSet(EG_PureNode):
     """Make a new set"""
     
-    bl_idname = "egn.python.make_set"
+    bl_idname = "egn_python_make_set"
     bl_label = "Make Set"
 
     def init(self, context):
@@ -27,7 +27,7 @@ class EGN_MakeSet(EG_PureNode):
 class EGN_SetAdd(EG_PureNode):
     """Add an item to a set"""
     
-    bl_idname = "egn.python.set_add"
+    bl_idname = "egn_python_set_add"
     bl_label = "Add"
     
     def init(self, context):
@@ -45,7 +45,7 @@ class EGN_SetAdd(EG_PureNode):
 class EGN_SetClear(EG_PureNode):
     """Clear a set"""
     
-    bl_idname = "egn.python.set_clear"
+    bl_idname = "egn_python_set_clear"
     bl_label = "Clear"
     
     def init(self, context):
@@ -61,7 +61,7 @@ class EGN_SetClear(EG_PureNode):
 class EGN_SetDifference(EG_PureNode):
     """Difference between two sets"""
     
-    bl_idname = "egn.python.set_difference"
+    bl_idname = "egn_python_set_difference"
     bl_label = "Difference"
     
     def init(self, context):
@@ -78,7 +78,7 @@ class EGN_SetDifference(EG_PureNode):
 class EGN_SetDiscard(EG_PureNode):
     """Remove an item from a set"""
     
-    bl_idname = "egn.python.set_discard"
+    bl_idname = "egn_python_set_discard"
     bl_label = "Discard"
     
     def init(self, context):
@@ -96,7 +96,7 @@ class EGN_SetDiscard(EG_PureNode):
 class EGN_SetIntersection(EG_PureNode):
     """Intersection between two sets"""
     
-    bl_idname = "egn.python.set_intersection"
+    bl_idname = "egn_python_set_intersection"
     bl_label = "Intersection"
     
     def init(self, context):
@@ -113,7 +113,7 @@ class EGN_SetIntersection(EG_PureNode):
 class EGN_SetIsDisjoint(EG_PureNode):
     """Check if two sets are disjoint"""
     
-    bl_idname = "egn.python.set_is_disjoint"
+    bl_idname = "egn_python_set_is_disjoint"
     bl_label = "Is Disjoint"
     
     def init(self, context):
@@ -130,7 +130,7 @@ class EGN_SetIsDisjoint(EG_PureNode):
 class EGN_SetIsSubset(EG_PureNode):
     """Check if a set is a subset of another set"""
     
-    bl_idname = "egn.python.set_is_subset"
+    bl_idname = "egn_python_set_is_subset"
     bl_label = "Is Subset"
     
     def init(self, context):
@@ -147,7 +147,7 @@ class EGN_SetIsSubset(EG_PureNode):
 class EGN_SetIsSuperSet(EG_PureNode):
     """Check if a set is a superset of another set"""
     
-    bl_idname = "egn.python.set_is_superset"
+    bl_idname = "egn_python_set_is_superset"
     bl_label = "Is Superset"
     
     def init(self, context):
@@ -164,7 +164,7 @@ class EGN_SetIsSuperSet(EG_PureNode):
 class EGN_SetPop(EG_PureNode):
     """Remove last item from a set"""
     
-    bl_idname = "egn.python.set_pop"
+    bl_idname = "egn_python_set_pop"
     bl_label = "Pop"
     
     def init(self, context):
@@ -180,7 +180,7 @@ class EGN_SetPop(EG_PureNode):
 class EGN_SetSymmetricDifference(EG_PureNode):
     """Get the symmetric difference between two sets"""
     
-    bl_idname = "egn.python.set_symmetric_difference"
+    bl_idname = "egn_python_set_symmetric_difference"
     bl_label = "Symmetric Difference"
     
     def init(self, context):
@@ -197,7 +197,7 @@ class EGN_SetSymmetricDifference(EG_PureNode):
 class EGN_SetUnion(EG_PureNode):
     """Union between two sets"""
     
-    bl_idname = "egn.python.set_union"
+    bl_idname = "egn_python_set_union"
     bl_label = "Union"
     
     def init(self, context):
@@ -214,7 +214,7 @@ class EGN_SetUnion(EG_PureNode):
 class EGN_SetLength(EG_PureNode):
     """Get the length of a set"""
     
-    bl_idname = "egn.python.set_length"
+    bl_idname = "egn_python_set_length"
     bl_label = "Length"
     
     def init(self, context):

@@ -11,7 +11,7 @@ from ....socket.primitive import EGS_Value
 class EGN_GetActiveObject(EG_PureNode):
     """Set the object to active"""
     
-    bl_idname = "egn.object.get_active"
+    bl_idname = "egn_object_get_active"
     bl_label = "Get Active Object"
     bl_icon = "OBJECT_ORIGIN"
 
@@ -20,42 +20,39 @@ class EGN_GetActiveObject(EG_PureNode):
 
     def on_object_Id(self):
         object_Id = bpy.context.view_layer.objects.active
-        return object_Id.name if object_Id else None
+        return object_Id.name if object_Id else ""
 
 
 class EGN_SetActiveObject(EG_Node):
     """Set the object to active"""
     
-    bl_idname = "egn.object.set_active"
+    bl_idname = "egn_object_set_active"
     bl_label = "Set Active Object"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
+        self.add_in("NodeSocketString", "object Id")
         self.add_exec_out("success")
         self.add_exec_out("failed")
     
     def execute(self):
-        try:
-            in_objectId = self.get_input_value("object Id")
+        in_objectId = self.get_input_value("object Id")
+        object_data = bpy.data.objects.get(in_objectId)
 
-            object_data = bpy.data.objects.get(in_objectId)
-            if object_data:
-                bpy.context.view_layer.objects.active = object_data
-                object_data.select_set(True)
-
+        if object_data:
+            bpy.context.view_layer.objects.active = object_data
+            object_data.select_set(True)
             self.execute_next("success")
             
-        except Exception as e:
-            print(e)
+        else:
             self.execute_next("failed")
 
 
 class EGN_SelectAllObjects(EG_Node):
     """Select all objects"""
     
-    bl_idname = "egn.object.select_all"
+    bl_idname = "egn_object_select_all"
     bl_label = "Select All Objects"
     bl_icon = "ADD"
 
@@ -68,6 +65,7 @@ class EGN_SelectAllObjects(EG_Node):
         try:
             bpy.ops.object.select_all(action="SELECT")
             self.execute_next("success")
+
         except Exception as e:
             print(e)
             self.execute_next("failed")
@@ -76,7 +74,7 @@ class EGN_SelectAllObjects(EG_Node):
 class EGN_DeselectAllObjects(EG_Node):
     """Unselect all objects"""
     
-    bl_idname = "egn.object.deselect_all"
+    bl_idname = "egn_object_deselect_all"
     bl_label = "Deselect All Objects"
     bl_icon = "REMOVE"
 
@@ -90,6 +88,7 @@ class EGN_DeselectAllObjects(EG_Node):
             bpy.ops.object.select_all(action="DESELECT")
             bpy.context.view_layer.objects.active = None
             self.execute_next("success")
+
         except Exception as e:
             print(e)
             self.execute_next("failed")
@@ -98,11 +97,11 @@ class EGN_DeselectAllObjects(EG_Node):
 class EGN_SetObjectMode(EG_Node):
     """Set object mode"""
     
-    bl_idname = "egn.object.set_mode"
+    bl_idname = "egn_object_set_mode"
     bl_label = "Set Object Mode"
     bl_icon = "TOOL_SETTINGS"
 
-    object_mode: EnumProperty(
+    prop_mode: EnumProperty(
         name="Mode",
         items=[
             ("OBJECT", "Object", ""),
@@ -116,30 +115,27 @@ class EGN_SetObjectMode(EG_Node):
         default="OBJECT",
     ) # type: ignore
 
+    prop_changed: BoolProperty(default=False) # type: ignore
+
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, "object_mode")
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        layout.prop(self, "prop_mode")
 
     def execute(self):
         try:
             if not bpy.context.view_layer.objects.active:
                 raise Exception("No active object")
             
-            bpy.ops.object.mode_set(mode=self.object_mode)
-            add_linked_cache(self, "changed", True)
-            self.execute_next("exec")
+            bpy.ops.object.mode_set(mode=self.prop_mode)
+            self.execute_next("success")
             
         except Exception as e:
             print(e)
-            add_linked_cache(self, "changed", False)
-            self.execute_next("exec")
+            self.execute_next("failed")
 
 
 classes = [

@@ -10,9 +10,9 @@ from ....socket.primitive import EGS_Value
 class EGN_GetViewportVisibility(EG_PureNode):
     """Get the viewport visibility of an object"""
     
-    bl_idname = "egn.object.get_viewport_visibility"
+    bl_idname = "egn_object_get_viewport_visibility"
     bl_label = "Get Viewport Visibility"
-    bl_icon = "OBJECT_ORIGIN"
+    bl_icon = "HIDE_OFF"
 
     def init(self, context):
         self.add_in("NodeSocketString", "object Id")
@@ -31,15 +31,16 @@ class EGN_GetViewportVisibility(EG_PureNode):
 class EGN_SetViewportVisibility(EG_Node):
     """Set viewport visibility of an object"""
     
-    bl_idname = "egn.object.set_viewport_visibility"
+    bl_idname = "egn_object_set_viewport_visibility"
     bl_label = "Set Viewport Visibility"
-    bl_icon = "OBJECT_ORIGIN"
+    bl_icon = "HIDE_OFF"
 
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_in("NodeSocketBool", "visible", 1, False)
-        self.add_exec_out("exec")
+        self.add_in(socket="NodeSocketBool", name="visible", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
@@ -49,16 +50,17 @@ class EGN_SetViewportVisibility(EG_Node):
 
         if object_data:
             object_data.hide_viewport = not in_visible
-
-        self.execute_next("exec")
+            self.execute_next("success")
+        else:
+            self.execute_next("failed")
 
 
 class EGN_GetRenderVisibility(EG_PureNode):
     """Get the render visibility of an object"""
     
-    bl_idname = "egn.object.get_render_visibility"
+    bl_idname = "egn_object_get_render_visibility"
     bl_label = "Get Render Visibility"
-    bl_icon = "OBJECT_ORIGIN"
+    bl_icon = "RESTRICT_RENDER_OFF"
 
     def init(self, context):
         self.add_in("NodeSocketString", "object Id")
@@ -77,15 +79,16 @@ class EGN_GetRenderVisibility(EG_PureNode):
 class EGN_SetRenderVisibility(EG_Node):
     """Set Render visibility of an object"""
     
-    bl_idname = "egn.object.set_render_visibility"
+    bl_idname = "egn_object_set_render_visibility"
     bl_label = "Set Render Visibility"
-    bl_icon = "OBJECT_ORIGIN"
+    bl_icon = "RESTRICT_RENDER_OFF"
 
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_in("NodeSocketBool", "visible", 1, False)
-        self.add_exec_out("exec")
+        self.add_in(socket="NodeSocketBool", name="visible", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
@@ -95,8 +98,9 @@ class EGN_SetRenderVisibility(EG_Node):
 
         if object_data:
             object_data.hide_render = not in_visible
-
-        self.execute_next("exec")
+            self.execute_next("success")
+        else:
+            self.execute_next("failed")
 
 
 classes = [

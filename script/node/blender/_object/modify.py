@@ -11,162 +11,187 @@ from ....socket.primitive import EGS_Value
 class EGN_RenameObject(EG_Node):
     """Rename an object"""
     
-    bl_idname = "egn.object.rename"
+    bl_idname = "egn_object_rename"
     bl_label = "Rename Object"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketString", "name", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        self.add_in(socket="NodeSocketString", name="object Id", hide_value=False)
+        self.add_in(socket="NodeSocketString", name="name", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_name = self.get_input_value("name")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
 
         if object_data:
             object_data.name = in_name
-            object_data.type = ""
-            out_changed = True
+            self.execute_next("success")
 
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+        else:
+            self.execute_next("failed")
 
 
 class EGN_RenameData(EG_Node):
     """Rename object's data"""
     
-    bl_idname = "egn.object.rename_data"
+    bl_idname = "egn_object_rename_data"
     bl_label = "Rename Data"
     bl_icon = "RNA"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketString", "name", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        self.add_in(socket="NodeSocketString", name="object Id", hide_value=False)
+        self.add_in(socket="NodeSocketString", name="name", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_name = self.get_input_value("name")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
 
-        if object_data:
+        if object_data and object_data.data:
             object_data.data.name = in_name
-            out_changed = True
+            self.execute_next("success")
+
         else:
-            print("Object data not found")
-
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+            self.execute_next("failed")
 
 
 class EGN_DeleteObject(EG_Node):
     """Delete an object"""
     
-    bl_idname = "egn.object.delete"
+    bl_idname = "egn_object_delete"
     bl_label = "Delete Object"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "success") # bind: success -> on_success
-
-    def on_success(self):
-        return get_linked_cache(self, "success")
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
-        out_success = False
-
         object_data = bpy.data.objects.get(in_objectId)
 
         if object_data:
             bpy.data.objects.remove(object_data, do_unlink=True)
             bpy.ops.ed.undo_push()
-
-            out_success = True
-
-        add_linked_cache(self, "success", out_success)
-
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "success")
+            self.execute_next("success")
+            
+        else:
+            self.execute_next("failed")
 
 
 class EGN_DuplicateObject(EG_Node):
     """Duplicate an object"""
     
-    bl_idname = "egn.object.duplicate"
+    bl_idname = "egn_object_duplicate"
     bl_label = "Duplicate Object"
     bl_icon = "OBJECT_ORIGIN"
+
+    prop_objectId: StringProperty(name="object Id") # type: ignore
 
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_exec_out("exec")
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
         self.add_out("NodeSocketString", "object Id") # bind: object Id -> on_object_Id
-        self.add_out("NodeSocketBool", "success") # bind: success -> on_success
 
     def on_object_Id(self):
-        return get_linked_cache(self, "object Id")
-
-    def on_success(self):
-        return get_linked_cache(self, "success")
+        return self.prop_objectId
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        out_objectId = None
-        out_success = False
+        try:
+            self.prop_objectId = ""
 
-        object_data = bpy.data.objects.get(in_objectId)
+            in_objectId = self.get_input_value("object Id")
+            object_data = bpy.data.objects.get(in_objectId)
 
-        if object_data:
+            if not object_data:
+                raise Exception("Object not found")
+            
             new_object = object_data.copy()
             new_object.data = object_data.data.copy()
 
             bpy.context.collection.objects.link(new_object)
             bpy.ops.ed.undo_push()
 
-            out_objectId = new_object.name
-            out_success = True
+            self.prop_objectId = new_object.name
+            self.execute_next("success")
 
-        add_linked_cache(self, "object Id", out_objectId)
-        add_linked_cache(self, "success", out_success)
+        except Exception as e:
+            print(e)
+            self.execute_next("failed")
 
-        self.execute_next("exec")
 
-    def free(self):
-        remove_linked_cache(self, "object Id")
-        remove_linked_cache(self, "success")
+class EGN_SetParent(EG_Node):
+    """Assign a parent to an object"""
+    
+    bl_idname = "egn_object_set_parent"
+    bl_label = "Set Parent"
+    bl_icon = "LINKED"
+
+    def init(self, context):
+        self.add_exec_in("exec")
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in("NodeSocketString", "parent Id")
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
+    
+    def execute(self):
+        in_objectId = self.get_input_value("object Id")
+        in_parentId = self.get_input_value("parent Id")
+
+        object_data = bpy.data.objects.get(in_objectId)
+        parent_data = bpy.data.objects.get(in_parentId)
+
+        if object_data and parent_data:
+            object_data.parent = parent_data
+            self.execute_next("success")
+            
+        else:
+            self.execute_next("failed")
+
+
+class EGN_ClearParent(EG_Node):
+    """Remove a parent from an object"""
+    
+    bl_idname = "egn_object_clear_parent"
+    bl_label = "Clear Parent"
+    bl_icon = "UNLINKED"
+
+    def init(self, context):
+        self.add_exec_in("exec")
+        self.add_in("NodeSocketString", "object Id")
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
+    
+    def execute(self):
+        in_objectId = self.get_input_value("object Id")
+        object_data = bpy.data.objects.get(in_objectId)
+
+        if object_data:
+            object_data.parent = None
+            self.execute_next("success")
+            
+        else:
+            self.execute_next("failed")
 
 
 classes = [
     EGN_RenameObject,
     EGN_RenameData,
     EGN_DeleteObject,
-    EGN_DuplicateObject
+    EGN_DuplicateObject,
+    EGN_SetParent,
+    EGN_ClearParent,
 ]

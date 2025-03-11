@@ -12,7 +12,7 @@ from ...socket.primitive import EGS_Value
 class EGN_Print(EG_Node):
     """Prints a value into console"""
     
-    bl_idname = "egn.python.print"
+    bl_idname = "egn_python_print"
     bl_label = "Print"
 
     def init(self, context):
@@ -28,7 +28,7 @@ class EGN_Print(EG_Node):
 class EGN_SyncDelay(EG_Node):
     """Create a blocking delay for the next execution"""
     
-    bl_idname = "egn.python.sync_delay"
+    bl_idname = "egn_python_sync_delay"
     bl_label = "Sync Delay"
     bl_icon = "PREVIEW_RANGE"
 
@@ -53,7 +53,7 @@ class EGN_SyncDelay(EG_Node):
 class EGN_AsyncDelay(EG_Node):
     """Create a non-blocking delay for the next execution"""
     
-    bl_idname = "egn.python.async_delay"
+    bl_idname = "egn_python_async_delay"
     bl_label = "Async Delay"
     bl_icon = "PREVIEW_RANGE"
 
@@ -81,7 +81,7 @@ class EGN_AsyncDelay(EG_Node):
 class EGN_Math(EG_PureNode):
     """Node with math methods"""
     
-    bl_idname = "egn.python.math"
+    bl_idname = "egn_python_math"
     bl_label = "Math"
 
     single_in = {

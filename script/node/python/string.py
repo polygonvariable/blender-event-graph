@@ -11,8 +11,9 @@ from ...socket.primitive import EGS_Value
 class EGN_AppendString(EG_PureNode):
     """Node to append strings"""
     
-    bl_idname = "egn.python.append_string"
+    bl_idname = "egn_python_append_string"
     bl_label = "Append"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "a", 1, False)
@@ -26,8 +27,9 @@ class EGN_AppendString(EG_PureNode):
 class EGN_ContainString(EG_PureNode):
     """Node to check if a string contains another string"""
     
-    bl_idname = "egn.python.contain_string"
+    bl_idname = "egn_python_contain_string"
     bl_label = "Contains"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -43,8 +45,9 @@ class EGN_ContainString(EG_PureNode):
 class EGN_SliceString(EG_PureNode):
     """Node to slice a string"""
     
-    bl_idname = "egn.python.slice_string"
+    bl_idname = "egn_python_slice_string"
     bl_label = "Slice"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -62,8 +65,9 @@ class EGN_SliceString(EG_PureNode):
 class EGN_SliceFromStartString(EG_PureNode):
     """Node to slice a string from start"""
     
-    bl_idname = "egn.python.slice_from_start_string"
+    bl_idname = "egn_python_slice_from_start_string"
     bl_label = "Slice From Start"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -79,8 +83,9 @@ class EGN_SliceFromStartString(EG_PureNode):
 class EGN_SliceFromEndString(EG_PureNode):
     """Node to slice a string from end"""
     
-    bl_idname = "egn.python.slice_from_end_string"
+    bl_idname = "egn_python_slice_from_end_string"
     bl_label = "Slice From End"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -96,8 +101,9 @@ class EGN_SliceFromEndString(EG_PureNode):
 class EGN_ToUpperString(EG_PureNode):
     """Node to convert a string to upper case"""
     
-    bl_idname = "egn.python.to_upper_string"
+    bl_idname = "egn_python_to_upper_string"
     bl_label = "To Upper"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -111,8 +117,9 @@ class EGN_ToUpperString(EG_PureNode):
 class EGN_ToLowerString(EG_PureNode):
     """Node to convert a string to lower case"""
     
-    bl_idname = "egn.python.to_lower_string"
+    bl_idname = "egn_python_to_lower_string"
     bl_label = "To Lower"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -126,8 +133,9 @@ class EGN_ToLowerString(EG_PureNode):
 class EGN_CapitalizeString(EG_PureNode):
     """Node to capitalize a string"""
     
-    bl_idname = "egn.python.capitalize_string"
+    bl_idname = "egn_python_capitalize_string"
     bl_label = "Capitalize"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -141,8 +149,9 @@ class EGN_CapitalizeString(EG_PureNode):
 class EGN_CasefoldString(EG_PureNode):
     """Node to casefold a string"""
     
-    bl_idname = "egn.python.casefold_string"
+    bl_idname = "egn_python_casefold_string"
     bl_label = "Casefold"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -156,8 +165,9 @@ class EGN_CasefoldString(EG_PureNode):
 class EGN_CountString(EG_PureNode):
     """Node to count a string"""
     
-    bl_idname = "egn.python.count_string"
+    bl_idname = "egn_python_count_string"
     bl_label = "Count"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -173,8 +183,9 @@ class EGN_CountString(EG_PureNode):
 class EGN_EndsWithString(EG_PureNode):
     """Node to check if a string ends with another string"""
     
-    bl_idname = "egn.python.ends_with_string"
+    bl_idname = "egn_python_ends_with_string"
     bl_label = "Ends With"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -190,8 +201,9 @@ class EGN_EndsWithString(EG_PureNode):
 class EGN_FindString(EG_PureNode):
     """Node to get index of a string"""
     
-    bl_idname = "egn.python.find_string"
+    bl_idname = "egn_python_find_string"
     bl_label = "Find"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -207,8 +219,9 @@ class EGN_FindString(EG_PureNode):
 class EGN_IndexString(EG_PureNode):
     """Node to get index of a string"""
     
-    bl_idname = "egn.python.index_string"
+    bl_idname = "egn_python_index_string"
     bl_label = "Index Of"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -224,8 +237,9 @@ class EGN_IndexString(EG_PureNode):
 class EGN_IsAString(EG_PureNode):
     """Node to check if a string is an instance of another string"""
     
-    bl_idname = "egn.python.is_a_string"
+    bl_idname = "egn_python_is_a_string"
     bl_label = "Is A"
+    bl_icon = "FONTPREVIEW"
 
     condition: EnumProperty(
         name="Operator",
@@ -271,8 +285,9 @@ class EGN_IsAString(EG_PureNode):
 class EGN_StripString(EG_PureNode):
     """Node to remove spaces from a string"""
     
-    bl_idname = "egn.python.strip_string"
+    bl_idname = "egn_python_strip_string"
     bl_label = "Strip"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -286,8 +301,9 @@ class EGN_StripString(EG_PureNode):
 class EGN_SplitString(EG_PureNode):
     """Node to split a string"""
     
-    bl_idname = "egn.python.split_string"
+    bl_idname = "egn_python_split_string"
     bl_label = "Split"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -303,8 +319,9 @@ class EGN_SplitString(EG_PureNode):
 class EGN_ReplaceString(EG_PureNode):
     """Node to replace strings"""
     
-    bl_idname = "egn.python.replace_string"
+    bl_idname = "egn_python_replace_string"
     bl_label = "Replace"
+    bl_icon = "FONTPREVIEW"
 
     def init(self, context):
         self.add_in("NodeSocketString", "source", 1, False)
@@ -321,13 +338,12 @@ class EGN_ReplaceString(EG_PureNode):
 
 classes = [
     EGN_AppendString,
-    EGN_ReplaceString,
     EGN_ContainString,
-    EGN_ToUpperString,
-    EGN_ToLowerString,
     EGN_SliceString,
     EGN_SliceFromStartString,
     EGN_SliceFromEndString,
+    EGN_ToUpperString,
+    EGN_ToLowerString,
     EGN_CapitalizeString,
     EGN_CasefoldString,
     EGN_CountString,
@@ -337,4 +353,5 @@ classes = [
     EGN_IsAString,
     EGN_StripString,
     EGN_SplitString,
+    EGN_ReplaceString,
 ]

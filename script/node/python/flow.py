@@ -1,4 +1,4 @@
-import functools
+import math
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
@@ -14,7 +14,7 @@ from ...operator.exec_main import EGOP_ExecuteMain
 class EGN_Function(EG_Node):
     """Node to initialize a execution flow"""
     
-    bl_idname = "egn.python.function"
+    bl_idname = "egn_python_function"
     bl_label = "Function"
     bl_icon = "FF"
 
@@ -32,7 +32,7 @@ class EGN_Function(EG_Node):
 class EGN_Callback(EG_Node):
     """A Callback Node"""
     
-    bl_idname = "egn.python.callback"
+    bl_idname = "egn_python_callback"
     bl_label = "Callback"
     bl_icon = "FF"
 
@@ -47,7 +47,7 @@ class EGN_Callback(EG_Node):
 class EGN_Branch(EG_Node):
     """Node to switch between execution flow based on boolean condition"""
     
-    bl_idname = "egn.python.branch"
+    bl_idname = "egn_python_branch"
     bl_label = "Branch"
 
     def init(self, context):
@@ -63,52 +63,93 @@ class EGN_Branch(EG_Node):
             self.execute_next("false")
 
 
-class EGN_ForLoop(EG_Node):
-    """Node to iterate over a range of values"""
+class EGN_Sequence(EG_Node):
+    """A node that executes a sequence of nodes"""
     
-    bl_idname = "egn.python.for_loop"
-    bl_label = "For Loop"
-    bl_icon = "UV_VERTEXSEL"
+    bl_idname = "egn_python_sequence"
+    bl_label = "Sequence"
+
+    def update_sockets(self, context):
+        for socket in self.outputs:
+            self.outputs.remove(socket)
+
+        in_count = int(self.socket_limit + 1)
+        for index in range(1, in_count):
+            self.add_exec_out("exec " + str(index))
+
+    socket_limit: IntProperty(name="Limit", default=1, update=update_sockets, min=1, max=10) # type: ignore
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketInt", "start", 1, False)
-        self.add_in("NodeSocketInt", "end", 1, False)
+        self.add_exec_out("exec 1")
+
+    def draw_buttons(self, context, layout):
+        layout.prop(self, "socket_limit")
+
+    def execute(self):
+        for socket in self.outputs:
+            self.execute_next(socket.name)
+
+
+class EGN_FlipFlop(EG_Node):
+    """A node that switches between two execution flows"""
+    
+    bl_idname = "egn_python_flipflop"
+    bl_label = "Flip Flop"
+
+    active_state: BoolProperty(name="State", default=True) # type: ignore
+    
+    def init(self, context):
+        self.add_exec_in("exec")
+        self.add_exec_out("a")
+        self.add_exec_out("b")
+
+    def execute(self):
+        if self.active_state:
+            self.active_state = False
+            self.execute_next("a")
+        else:
+            self.active_state = True
+            self.execute_next("b")
+
+
+class EGN_ForLoop(EG_Node):
+    """Node to iterate over a range of values"""
+    
+    bl_idname = "egn_python_for_loop"
+    bl_label = "For Loop"
+    bl_icon = "UV_VERTEXSEL"
+
+    prop_index: IntProperty(name="Index", default=0) # type: ignore
+
+    def init(self, context):
+        self.add_exec_in("exec")
+        self.add_in(socket="NodeSocketInt", name="start", hide_value=False, default=0)
+        self.add_in(socket="NodeSocketInt", name="end", hide_value=False, default=10)
 
         self.add_exec_out("loop")
         self.add_out("NodeSocketInt", "index") # bind: index -> on_index
         self.add_exec_out("completed")
 
-        self.inputs["start"].default_value = 0
-        self.inputs["end"].default_value = 10
-
-    def draw_buttons(self, context, layout):
-        layout.prop(self, "start")
-        layout.prop(self, "end")
-
     def on_index(self):
-        return get_linked_cache(self, "index")
+        return self.prop_index
 
     def execute(self):
-
         in_start = self.get_input_value("start")
         in_end = self.get_input_value("end")
+        self.prop_index = in_start
 
-        for i in range(in_start, in_end):
-            add_linked_cache(self, "index", i)
+        for index in range(in_start, in_end):
+            self.prop_index = index
             self.execute_next("loop")
 
-        remove_linked_cache(self, "index")
         self.execute_next("completed")
-
-    def free(self):
-        remove_linked_cache(self, "index")
 
 
 class EGN_ForEach(EG_Node):
     """Node to iterate over a list of values"""
     
-    bl_idname = "egn.python.for_each"
+    bl_idname = "egn_python_for_each"
     bl_label = "For Each"
     bl_icon = "UV_VERTEXSEL"
 
@@ -144,6 +185,8 @@ classes = [
     EGN_Function,
     EGN_Callback,
     EGN_Branch,
+    EGN_Sequence,
+    EGN_FlipFlop,
     EGN_ForLoop,
     EGN_ForEach
 ]

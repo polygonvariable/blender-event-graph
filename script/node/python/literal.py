@@ -10,7 +10,7 @@ from ...socket.derived import EGS_Vector2D, EGS_Vector4D
 class EGN_LiteralInteger(EG_PureNode):
     """Event Literal Integer Node"""
     
-    bl_idname = "egn.python.literal_integer"
+    bl_idname = "egn_python_literal_integer"
     bl_label = "Literal Integer"
 
     value: IntProperty(name="Value") # type: ignore
@@ -28,7 +28,7 @@ class EGN_LiteralInteger(EG_PureNode):
 class EGN_LiteralFloat(EG_PureNode):
     """Event Literal Float Node"""
     
-    bl_idname = "egn.python.literal_float"
+    bl_idname = "egn_python_literal_float"
     bl_label = "Literal Float"
 
     value: FloatProperty(name="Value") # type: ignore
@@ -46,7 +46,7 @@ class EGN_LiteralFloat(EG_PureNode):
 class EGN_LiteralColor(EG_PureNode):
     """Event Literal Color Node"""
     
-    bl_idname = "egn.python.literal_color"
+    bl_idname = "egn_python_literal_color"
     bl_label = "Literal Color"
 
     value: FloatVectorProperty(
@@ -71,7 +71,7 @@ class EGN_LiteralColor(EG_PureNode):
 class EGN_LiteralString(EG_PureNode):
     """Event Literal String Node"""
     
-    bl_idname = "egn.python.literal_string"
+    bl_idname = "egn_python_literal_string"
     bl_label = "Literal String"
 
     value: StringProperty(name="Value") # type: ignore
@@ -89,7 +89,7 @@ class EGN_LiteralString(EG_PureNode):
 class EGN_LiteralBoolean(EG_PureNode):
     """Event Literal Boolean Node"""
     
-    bl_idname = "egn.python.literal_boolean"
+    bl_idname = "egn_python_literal_boolean"
     bl_label = "Literal Boolean"
 
     value: BoolProperty(name="Value") # type: ignore
@@ -107,7 +107,7 @@ class EGN_LiteralBoolean(EG_PureNode):
 class PNY_Break2D(EG_PureNode):
     """Event Break 2D Vector Node"""
     
-    bl_idname = "egn.python.break_2d"
+    bl_idname = "egn_python_break_2d"
     bl_label = "Break 2D Vector"
 
     def init(self, context):
@@ -125,7 +125,7 @@ class PNY_Break2D(EG_PureNode):
 class PNY_Break3D(EG_PureNode):
     """Event Break 3D Vector Node"""
     
-    bl_idname = "egn.python.break_3d"
+    bl_idname = "egn_python_break_3d"
     bl_label = "Break 3D Vector"
 
     def init(self, context):
@@ -147,7 +147,7 @@ class PNY_Break3D(EG_PureNode):
 class PNY_Break4D(EG_PureNode):
     """Event Break 4D Vector Node"""
     
-    bl_idname = "egn.python.break_4d"
+    bl_idname = "egn_python_break_4d"
     bl_label = "Break 4D Vector"
 
     def init(self, context):
@@ -173,7 +173,7 @@ class PNY_Break4D(EG_PureNode):
 class PNY_Make2D(EG_PureNode):
     """Event Make 2D Vector Node"""
     
-    bl_idname = "egn.python.make_2d"
+    bl_idname = "egn_python_make_2d"
     bl_label = "Make 2D Vector"
 
     def init(self, context):
@@ -190,7 +190,7 @@ class PNY_Make2D(EG_PureNode):
 class PNY_Make3D(EG_PureNode):
     """Event Make 3D Vector Node"""
     
-    bl_idname = "egn.python.make_3d"
+    bl_idname = "egn_python_make_3d"
     bl_label = "Make 3D Vector"
 
     def init(self, context):
@@ -209,7 +209,7 @@ class PNY_Make3D(EG_PureNode):
 class PNY_Make4D(EG_PureNode):
     """Event Make 4D Vector Node"""
     
-    bl_idname = "egn.python.make_4d"
+    bl_idname = "egn_python_make_4d"
     bl_label = "Make 4D Vector"
 
     def init(self, context):

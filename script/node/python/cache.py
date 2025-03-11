@@ -10,7 +10,7 @@ from ...socket.primitive import EGS_Value
 class EGN_SetCache(EG_Node):
     """Store or update a cache"""
     
-    bl_idname = "egn.python.cache_set"
+    bl_idname = "egn_python_cache_set"
     bl_label = "Set Cache"
     bl_icon = "PACKAGE"
 
@@ -30,7 +30,7 @@ class EGN_SetCache(EG_Node):
 class EGN_GetCache(EG_PureNode):
     """Get the cached value"""
     
-    bl_idname = "egn.python.cache_get"
+    bl_idname = "egn_python_cache_get"
     bl_label = "Get Cache"
     bl_icon = "PACKAGE"
 
@@ -46,7 +46,7 @@ class EGN_GetCache(EG_PureNode):
 class EGN_RemoveCache(EG_Node):
     """Remove the cached value"""
     
-    bl_idname = "egn.python.cache_remove"
+    bl_idname = "egn_python_cache_remove"
     bl_label = "Remove Cache"
     bl_icon = "PACKAGE"
 
@@ -67,7 +67,7 @@ class EGN_RemoveCache(EG_Node):
 class EGN_FlushCache(EG_Node):
     """Clear all runtime stored variables"""
     
-    bl_idname = "egn.python.cache_flush"
+    bl_idname = "egn_python_cache_flush"
     bl_label = "Flush Cache"
     bl_icon = "PACKAGE"
 
@@ -83,7 +83,7 @@ class EGN_FlushCache(EG_Node):
 class EGN_DumpCache(EG_Node):
     """Display all runtime stored in console"""
     
-    bl_idname = "egn.python.cache_dump"
+    bl_idname = "egn_python_cache_dump"
     bl_label = "Dump Cache"
     bl_icon = "PACKAGE"
 

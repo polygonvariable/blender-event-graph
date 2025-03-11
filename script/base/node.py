@@ -14,7 +14,7 @@ class EG_NodeType(Enum):
 class EG_PureNode(bpy.types.Node):
     """Pure node doesnt have execute socket"""
 
-    bl_idname = "eg.pure_node"
+    bl_idname = "eg_purenode"
     bl_label = "Pure Node"
     bl_icon = "MOD_PHYSICS"
     bl_width_default = 180
@@ -109,7 +109,7 @@ class EG_PureNode(bpy.types.Node):
 class EG_Node(EG_PureNode):
     """Event Node"""
 
-    bl_idname = "eg.node"
+    bl_idname = "eg_node"
     bl_label = "Impure Node"
     bl_icon = "SYSTEM"
 

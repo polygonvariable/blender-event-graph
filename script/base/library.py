@@ -17,8 +17,8 @@ def create_enum(items = []):
     return enum_items
 
 
-def is_objectId_valid(object_Id):
-    return object_Id is not None and object_Id in bpy.data.objects
+def is_object_valid(objectId):
+    return objectId and isinstance(objectId, str) and bpy.data.objects.get(objectId)
 
 
 cache_map = {}

@@ -10,12 +10,12 @@ from ....socket.primitive import EGS_Value
 class EGN_GetLocation(EG_PureNode):
     """Get the location of an object"""
     
-    bl_idname = "egn.object.get_location"
+    bl_idname = "egn_object_get_location"
     bl_label = "Get Location"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
-        self.add_in("NodeSocketString", "object Id", 1, False)
+        self.add_in("NodeSocketString", "object Id")
         self.add_out("NodeSocketVector", "location") # bind: location -> on_location
 
     def on_location(self):
@@ -27,47 +27,38 @@ class EGN_GetLocation(EG_PureNode):
 class EGN_SetLocation(EG_Node):
     """Set the location of an object"""
     
-    bl_idname = "egn.object.set_location"
+    bl_idname = "egn_object_set_location"
     bl_label = "Set Location"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketVector", "location", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketVector", name="location", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_location = self.get_input_value("location")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
-
         if object_data:
             object_data.location = in_location
-            out_changed = True
-
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+            self.execute_next("success")
+        else:
+            self.execute_next("failed")
 
 
 class EGN_GetRotation(EG_PureNode):
     """Get the rotation of an object"""
     
-    bl_idname = "egn.object.get_rotation"
+    bl_idname = "egn_object_get_rotation"
     bl_label = "Get Rotation"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
-        self.add_in("NodeSocketString", "object Id", 1, False)
+        self.add_in("NodeSocketString", "object Id")
         self.add_out("NodeSocketVector", "rotation") # bind: rotation -> on_rotation
 
     def on_rotation(self):
@@ -79,47 +70,38 @@ class EGN_GetRotation(EG_PureNode):
 class EGN_SetRotation(EG_Node):
     """Set the rotation of an object"""
     
-    bl_idname = "egn.object.set_rotation"
+    bl_idname = "egn_object_set_rotation"
     bl_label = "Set Rotation"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketVector", "rotation", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketVector", name="rotation", hide_value=False)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_rotation = self.get_input_value("rotation")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
-
         if object_data:
             object_data.rotation_euler = in_rotation
-            out_changed = True
-
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+            self.execute_next("success")
+        else:
+            self.execute_next("failed")
 
 
 class EGN_GetScale(EG_PureNode):
     """Get the scale of an object"""
     
-    bl_idname = "egn.object.get_scale"
+    bl_idname = "egn_object_get_scale"
     bl_label = "Get Scale"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
-        self.add_in("NodeSocketString", "object Id", 1, False)
+        self.add_in("NodeSocketString", "object Id")
         self.add_out("NodeSocketVector", "scale") # bind: scale -> on_scale
 
     def on_scale(self):
@@ -131,49 +113,38 @@ class EGN_GetScale(EG_PureNode):
 class EGN_SetScale(EG_Node):
     """Set the scale of an object"""
     
-    bl_idname = "egn.object.set_scale"
+    bl_idname = "egn_object_set_scale"
     bl_label = "Set Scale"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketVector", "scale", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketVector", name="scale", hide_value=False, default=(1.0, 1.0, 1.0))
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
 
-        self.inputs["scale"].default_value = (1.0, 1.0, 1.0)
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
-    
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_scale = self.get_input_value("scale")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
-
         if object_data:
             object_data.scale = in_scale
-            out_changed = True
-
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+            self.execute_next("success")
+        else:
+            self.execute_next("failed")
 
 
 class EGN_GetDimension(EG_PureNode):
     """Get the dimension of an object"""
     
-    bl_idname = "egn.object.get_dimension"
+    bl_idname = "egn_object_get_dimension"
     bl_label = "Get Dimension"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
-        self.add_in("NodeSocketString", "object Id", 1, False)
+        self.add_in("NodeSocketString", "object Id")
         self.add_out("NodeSocketVector", "dimension") # bind: dimension -> on_dimension
 
     def on_dimension(self):
@@ -185,38 +156,28 @@ class EGN_GetDimension(EG_PureNode):
 class EGN_SetDimension(EG_Node):
     """Set the dimension of an object"""
     
-    bl_idname = "egn.object.set_dimension"
+    bl_idname = "egn_object_set_dimension"
     bl_label = "Set Dimension"
     bl_icon = "OBJECT_ORIGIN"
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in("NodeSocketString", "object Id", 1, False)
-        self.add_in("NodeSocketVector", "dimension", 1, False)
-        self.add_exec_out("exec")
-        self.add_out("NodeSocketBool", "changed") # bind: changed -> on_changed
-
-        self.inputs["dimension"].default_value = (1.0, 1.0, 1.0)
-
-    def on_changed(self):
-        return get_linked_cache(self, "changed")
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketVector", name="dimension", hide_value=False, default=(1.0, 1.0, 1.0))
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
     
     def execute(self):
         in_objectId = self.get_input_value("object Id")
         in_dimension = self.get_input_value("dimension")
-        out_changed = False
 
         object_data = bpy.data.objects.get(in_objectId)
-
         if object_data:
             object_data.dimensions = in_dimension
-            out_changed = True
+            self.execute_next("success")
 
-        add_linked_cache(self, "changed", out_changed)
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "changed")
+        else:
+            self.execute_next("failed")
 
 
 classes = [

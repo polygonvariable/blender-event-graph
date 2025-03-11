@@ -6,7 +6,7 @@ from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringPropert
 class EG_Socket(NodeSocket):
     """Event Socket"""
 
-    bl_idname = "eg.socket"
+    bl_idname = "eg_socket"
     bl_label = "Event Socket"
 
     socket_color = (1.0, 1.0, 1.0, 1.0)

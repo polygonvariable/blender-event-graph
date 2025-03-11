@@ -9,11 +9,10 @@ from ...socket.derived import EGS_Array
 from ...socket.primitive import EGS_Value
 
 
-
 class EGN_MakeArray(EG_PureNode):
     """Make a new array"""
     
-    bl_idname = "egn.python.make_array"
+    bl_idname = "egn_python_make_array"
     bl_label = "Make Array"
 
     def init(self, context):
@@ -27,7 +26,7 @@ class EGN_MakeArray(EG_PureNode):
 class EGN_ArrayMerge(EG_PureNode):
     """Node to merge two arrays"""
     
-    bl_idname = "egn.python.array_merge"
+    bl_idname = "egn_python_array_merge"
     bl_label = "Merge"
     
     def init(self, context):
@@ -44,7 +43,7 @@ class EGN_ArrayMerge(EG_PureNode):
 class EGN_ArrayAppend(EG_PureNode):
     """Node to append an item to an array"""
     
-    bl_idname = "egn.python.array_append"
+    bl_idname = "egn_python_array_append"
     bl_label = "Append"
     
     def init(self, context):
@@ -62,7 +61,7 @@ class EGN_ArrayAppend(EG_PureNode):
 class EGN_ArrayClear(EG_PureNode):
     """Node to clear an array"""
     
-    bl_idname = "egn.python.array_clear"
+    bl_idname = "egn_python_array_clear"
     bl_label = "Clear"
     
     def init(self, context):
@@ -78,7 +77,7 @@ class EGN_ArrayClear(EG_PureNode):
 class EGN_ArrayCount(EG_PureNode):
     """Node count certain item in an array"""
     
-    bl_idname = "egn.python.array_count"
+    bl_idname = "egn_python_array_count"
     bl_label = "Count"
     
     def init(self, context):
@@ -95,7 +94,7 @@ class EGN_ArrayCount(EG_PureNode):
 class EGN_ArrayIndex(EG_PureNode):
     """Get index of an item in an array"""
     
-    bl_idname = "egn.python.array_index"
+    bl_idname = "egn_python_array_index"
     bl_label = "Index"
     
     def init(self, context):
@@ -112,7 +111,7 @@ class EGN_ArrayIndex(EG_PureNode):
 class EGN_ArrayInsert(EG_PureNode):
     """Insert an item in an array at a specific index"""
     
-    bl_idname = "egn.python.array_insert"
+    bl_idname = "egn_python_array_insert"
     bl_label = "Insert"
     
     def init(self, context):
@@ -132,7 +131,7 @@ class EGN_ArrayInsert(EG_PureNode):
 class EGN_ArrayPop(EG_PureNode):
     """Event Array Pop Node"""
     
-    bl_idname = "egn.python.array_pop"
+    bl_idname = "egn_python_array_pop"
     bl_label = "Pop"
     
     def init(self, context):
@@ -148,7 +147,7 @@ class EGN_ArrayPop(EG_PureNode):
 class EGN_ArrayRemove(EG_PureNode):
     """Remove an item from an array"""
     
-    bl_idname = "egn.python.array_remove"
+    bl_idname = "egn_python_array_remove"
     bl_label = "Remove"
     
     def init(self, context):
@@ -166,7 +165,7 @@ class EGN_ArrayRemove(EG_PureNode):
 class EGN_ArrayReverse(EG_PureNode):
     """Reverse an array"""
     
-    bl_idname = "egn.python.array_reverse"
+    bl_idname = "egn_python_array_reverse"
     bl_label = "Reverse"
     
     def init(self, context):
@@ -182,7 +181,7 @@ class EGN_ArrayReverse(EG_PureNode):
 class EGN_ArraySort(EG_PureNode):
     """Sort an array"""
     
-    bl_idname = "egn.python.array_sort"
+    bl_idname = "egn_python_array_sort"
     bl_label = "Sort"
 
     reverse = bpy.props.BoolProperty(name="Reverse", default=False)
@@ -203,7 +202,7 @@ class EGN_ArraySort(EG_PureNode):
 class EGN_ArrayGet(EG_PureNode):
     """Get an item from an array at a specific index"""
     
-    bl_idname = "egn.python.array_get"
+    bl_idname = "egn_python_array_get"
     bl_label = "Get"
     
     def init(self, context):
@@ -220,7 +219,7 @@ class EGN_ArrayGet(EG_PureNode):
 class EGN_ArraySet(EG_PureNode):
     """Update an item from an array at a specific index if it exists"""
     
-    bl_idname = "egn.python.array_set"
+    bl_idname = "egn_python_array_set"
     bl_label = "Set"
     
     def init(self, context):
@@ -243,7 +242,7 @@ class EGN_ArraySet(EG_PureNode):
 class EGN_ArrayLength(EG_PureNode):
     """Get the length of an array"""
     
-    bl_idname = "egn.python.array_length"
+    bl_idname = "egn_python_array_length"
     bl_label = "Length"
     
     def init(self, context):

@@ -10,7 +10,7 @@ from ...socket.primitive import EGS_Value
 class EGN_MakeMap(EG_PureNode):
     """Make a new map"""
     
-    bl_idname = "egn.python.make_map"
+    bl_idname = "egn_python_make_map"
     bl_label = "Make Map"
     bl_icon = "PRESET"
 
@@ -28,7 +28,7 @@ class EGN_MakeMap(EG_PureNode):
 class EGN_MapMerge(EG_PureNode):
     """Merge multiple maps into one"""
     
-    bl_idname = "egn.python.map_merge"
+    bl_idname = "egn_python_map_merge"
     bl_label = "Merge"
     bl_icon = "PRESET"
 
@@ -49,7 +49,7 @@ class EGN_MapMerge(EG_PureNode):
 class EGN_MapClear(EG_PureNode):
     """Clear a map"""
     
-    bl_idname = "egn.python.map_clear"
+    bl_idname = "egn_python_map_clear"
     bl_label = "Clear"
     bl_icon = "PRESET"
 
@@ -66,7 +66,7 @@ class EGN_MapClear(EG_PureNode):
 class EGN_MapGet(EG_PureNode):
     """Get value from a map by key"""
     
-    bl_idname = "egn.python.map_get"
+    bl_idname = "egn_python_map_get"
     bl_label = "Get"
     bl_icon = "PRESET"
 
@@ -84,7 +84,7 @@ class EGN_MapGet(EG_PureNode):
 class EGN_MapSet(EG_PureNode):
     """Set or update value in a map by key"""
     
-    bl_idname = "egn.python.map_set"
+    bl_idname = "egn_python_map_set"
     bl_label = "Set"
     bl_icon = "PRESET"
 
@@ -106,7 +106,7 @@ class EGN_MapSet(EG_PureNode):
 class EGN_MapKeys(EG_PureNode):
     """Get an array of map keys"""
     
-    bl_idname = "egn.python.map_keys"
+    bl_idname = "egn_python_map_keys"
     bl_label = "Keys"
     bl_icon = "PRESET"
 
@@ -122,7 +122,7 @@ class EGN_MapKeys(EG_PureNode):
 class EGN_MapValues(EG_PureNode):
     """Get an array of map values"""
     
-    bl_idname = "egn.python.map_values"
+    bl_idname = "egn_python_map_values"
     bl_label = "Values"
     bl_icon = "PRESET"
 
@@ -138,7 +138,7 @@ class EGN_MapValues(EG_PureNode):
 class EGN_MapItems(EG_PureNode):
     """Get an array of map items"""
     
-    bl_idname = "egn.python.map_items"
+    bl_idname = "egn_python_map_items"
     bl_label = "Items"
     bl_icon = "PRESET"
 
@@ -154,7 +154,7 @@ class EGN_MapItems(EG_PureNode):
 class EGN_MapPop(EG_PureNode):
     """Remove value from a map by key"""
     
-    bl_idname = "egn.python.map_pop"
+    bl_idname = "egn_python_map_pop"
     bl_label = "Pop"
     bl_icon = "PRESET"
 
