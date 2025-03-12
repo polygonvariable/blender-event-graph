@@ -17,25 +17,31 @@ class EGN_JoinMeshes(EG_Node):
     bl_label = "Join Meshes"
     bl_icon = "SELECT_EXTEND"
 
+    prop_dataId: StringProperty(name="data Id") # type: ignore
+    prop_objectId: StringProperty(name="object Id") # type: ignore
+
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in(EGS_Array.bl_idname, "object Ids", limit=100)
-        self.add_exec_out("exec")
+        self.add_in(socket=EGS_Array.bl_idname, name="object Ids", limit=100)
+        self.add_exec_out("success")
+        self.add_exec_out("failed")
         self.add_out("NodeSocketString", "data Id") # bind: dataId -> on_data_Id
         self.add_out("NodeSocketString", "object Id") # bind: objectId -> on_object_Id
 
     def on_data_Id(self):
-        return get_linked_cache(self, "data Id")
+        return self.prop_dataId
     
     def on_object_Id(self):
-        return get_linked_cache(self, "object Id")
+        return self.prop_objectId
 
     def execute(self):
+        self.prop_dataId = ""
+        self.prop_objectId = ""
+
         in_objectIds = self.get_input_values("object Ids")
 
-        if not in_objectIds:
-            # print("Object Ids is empty")
-            self.execute_next("exec")
+        if not isinstance(in_objectIds, list):
+            self.execute_next("failed")
             return
 
         bpy.ops.object.mode_set(mode="OBJECT")
@@ -43,32 +49,26 @@ class EGN_JoinMeshes(EG_Node):
 
         selected_objects = []
         for objectId in in_objectIds:
-            obj = bpy.data.objects.get(objectId)
-            if obj and obj.type == "MESH":
-                obj.select_set(True)
-                selected_objects.append(obj)
+            current_object = bpy.data.objects.get(objectId)
+            
+            if current_object and current_object.type == "MESH":
+                current_object.select_set(True)
+                selected_objects.append(current_object)
 
         if len(selected_objects) < 2:
-            # print("Not enough objects selected")
-            self.execute_next("exec")
+            self.execute_next("failed")
             return
 
         first_object = selected_objects[0]
         bpy.context.view_layer.objects.active = first_object
 
+        self.prop_dataId = first_object.data.name
+        self.prop_objectId = first_object.name
+
         bpy.ops.object.join()
         bpy.context.view_layer.update()
 
-        add_linked_cache(self, "data Id", first_object.data.name)
-        add_linked_cache(self, "object Id", first_object.name)
-
-        # print("Meshes joined")
-        self.execute_next("exec")
-
-    def free(self):
-        remove_linked_cache(self, "data Id")
-        remove_linked_cache(self, "object Id")
-
+        self.execute_next("success")
 
 
 classes = [

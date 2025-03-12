@@ -15,6 +15,7 @@ from .node.python import cache as n_cache
 
 from .node.blender import object as n_object
 from .node.blender import mesh as n_mesh
+from .node.blender import modifier as n_modifier
 from .node.blender import light as n_light
 
 
@@ -55,6 +56,7 @@ def register():
         EG_Category("egc_npy_light", "* Light", items=create_categories(n_light.classes)),
         EG_Category("egc_npy_object", "* Object", items=create_categories(n_object.classes)),
         EG_Category("egc_npy_mesh", "* Mesh", items=create_categories(n_mesh.classes)),
+        EG_Category("egc_npy_modifier", "* Modifier", items=create_categories(n_modifier.classes)),
         
     ]
     register_node_categories("egc_py", python_categories)

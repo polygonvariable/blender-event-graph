@@ -2,7 +2,7 @@ import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ...base.node import EG_Node, EG_PureNode
-from ...base.library import create_enum, add_linked_cache, remove_linked_cache, get_linked_cache, is_object_valid
+from ...base.library import create_enum, add_linked_cache, remove_linked_cache, get_linked_cache
 
 from ...socket.derived import EGS_Array
 from ...socket.primitive import EGS_Value

@@ -21,22 +21,26 @@ class EG_PureNode(bpy.types.Node):
     
     node_type = EG_NodeType.PURE
 
-    def add_in(self, socket, name = "in", limit = 1, hide_value=True, default=None):
+    def add_in(self, socket, name = "in", limit = 1, hide_value=True, default=None, is_array=False):
         pin = self.inputs.new(socket, name)
         pin.link_limit = limit
         pin.hide_value = hide_value
         if default is not None:
             pin.default_value = default
+        if is_array:
+            pin.display_shape = "SQUARE"
 
     def rem_in(self, name):
         self.inputs.remove(self.inputs[name])
 
-    def rem_out(self, name):
-        self.outputs.remove(self.outputs[name])
-
-    def add_out(self, socket, name = "out", limit = 100):
+    def add_out(self, socket, name = "out", limit = 100, is_array=False):
         pin = self.outputs.new(socket, name)
         pin.link_limit = limit
+        if is_array:
+            pin.display_shape = "SQUARE"
+
+    def rem_out(self, name):
+        self.outputs.remove(self.outputs[name])
 
     def get_input_value(self, name):
         
@@ -64,7 +68,11 @@ class EG_PureNode(bpy.types.Node):
                         return method()
                 
             else:
-                return input_socket.default_value
+                if hasattr(input_socket, "default_value"):
+                    return input_socket.default_value
+                
+                else:
+                    return None
             
         return None
 
@@ -101,7 +109,11 @@ class EG_PureNode(bpy.types.Node):
                             values.append(method())
 
             else:
-                return values.append(input_socket.default_value)
+                if hasattr(input_socket, "default_value"):
+                    return values.append(input_socket.default_value)
+                
+                else:
+                    return values
 
         return values
     
@@ -114,7 +126,7 @@ class EG_Node(EG_PureNode):
     bl_icon = "SYSTEM"
 
     node_type = EG_NodeType.IMPURE
-    node_uuid: StringProperty(name="UUID", default=str(uuid.uuid4()), options={"HIDDEN"}) # type: ignore
+    node_uuid: StringProperty(name="UUID", default=str(uuid.uuid4())) # type: ignore
 
     def raid(self):
         self.node_uuid = str(uuid.uuid4())
@@ -123,7 +135,9 @@ class EG_Node(EG_PureNode):
         self.raid()
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, "node_uuid")
+        # enable for debug
+        # layout.prop(self, "node_uuid")
+        pass
 
     def add_exec_in(self, name = "in", is_callback = False):
         if not is_callback:

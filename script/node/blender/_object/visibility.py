@@ -19,11 +19,11 @@ class EGN_GetViewportVisibility(EG_PureNode):
         self.add_out("NodeSocketBool", "visible") # bind: visible -> on_visible
 
     def on_visible(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            return not object_data.hide_viewport
+        if bl_object:
+            return not bl_object.hide_viewport
 
         return False
 
@@ -43,14 +43,15 @@ class EGN_SetViewportVisibility(EG_Node):
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_visible = self.get_input_value("visible")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_visible = bool(self.get_input_value("visible"))
 
-        object_data = bpy.data.objects.get(in_objectId)
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            object_data.hide_viewport = not in_visible
+        if bl_object:
+            bl_object.hide_viewport = not in_visible
             self.execute_next("success")
+
         else:
             self.execute_next("failed")
 
@@ -67,11 +68,11 @@ class EGN_GetRenderVisibility(EG_PureNode):
         self.add_out("NodeSocketBool", "visible") # bind: visible -> on_visible
 
     def on_visible(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            return not object_data.hide_render
+        if bl_object:
+            return not bl_object.hide_render
 
         return False
 
@@ -91,14 +92,15 @@ class EGN_SetRenderVisibility(EG_Node):
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_visible = self.get_input_value("visible")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_visible = bool(self.get_input_value("visible"))
 
-        object_data = bpy.data.objects.get(in_objectId)
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            object_data.hide_render = not in_visible
+        if bl_object:
+            bl_object.hide_render = not in_visible
             self.execute_next("success")
+
         else:
             self.execute_next("failed")
 

@@ -2,7 +2,7 @@ import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ....base.node import EG_Node, EG_PureNode
-from ....base.library import create_enum, add_linked_cache, remove_linked_cache, get_linked_cache, is_object_valid
+from ....base.library import create_enum, add_linked_cache, remove_linked_cache, get_linked_cache
 
 from ....socket.derived import EGS_Array
 from ....socket.primitive import EGS_Value
@@ -24,9 +24,7 @@ class EGN_GetObjectId(EG_PureNode):
         layout.prop(self, "target_object")
 
     def on_object_Id(self):
-        if not self.target_object:
-            return ""
-        return str(self.target_object.name)
+        return self.target_object.name if self.target_object else ""
 
 
 class EGN_GetDataId(EG_PureNode):
@@ -41,11 +39,10 @@ class EGN_GetDataId(EG_PureNode):
         self.add_out("NodeSocketString", "data Id") # bind: data Id -> on_data_Id
 
     def on_data_Id(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data:
-            return object_data.data.name
-        return ""
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        return bl_object.data.name if bl_object and bl_object.data else ""
 
 
 class EGN_GetAllObjects(EG_Node):
@@ -61,15 +58,16 @@ class EGN_GetAllObjects(EG_Node):
         self.add_out(EGS_Array.bl_idname, "object Ids") # bind: object Ids -> on_object_Id
 
     def on_object_Ids(self):
-        return get_linked_cache(self, "object_Ids")
+        cache_value = get_linked_cache(self, "object Ids")
+        return cache_value if cache_value else []
 
     def execute(self):
-        object_ids = [obj.name for obj in bpy.data.objects]
-        add_linked_cache(self, "object_Ids", object_ids)
+        object_Ids = [obj.name for obj in bpy.data.objects]
+        add_linked_cache(self, "object Ids", object_Ids)
         self.execute_next("exec")
 
     def free(self):
-        remove_linked_cache(self, "object_Ids")
+        remove_linked_cache(self, "object Ids")
 
 
 class EGN_FilterObjects(EG_Node):
@@ -79,7 +77,7 @@ class EGN_FilterObjects(EG_Node):
     bl_label = "Filter Objects"
     bl_icon = "FILTER"
 
-    object_type: EnumProperty(
+    prop_type: EnumProperty(
         name="Type",
         items=[
             ("ARMATURE", "Armature", ""),
@@ -108,14 +106,19 @@ class EGN_FilterObjects(EG_Node):
         self.add_out(EGS_Array.bl_idname, "object Ids") # bind: object Ids -> on_object_Id
 
     def draw_buttons(self, context, layout):
-        layout.prop(self, "object_type")
+        layout.prop(self, "prop_type")
 
     def on_object_Ids(self):
-        return get_linked_cache(self, "object Ids")
+        cache_value = get_linked_cache(self, "object Ids")
+        return cache_value if cache_value else []
 
     def execute(self):
         objects_Ids = self.get_input_value("object Ids")
-        filtered_Ids = [obj for obj in objects_Ids if bpy.data.objects[obj].type == self.object_type]
+
+        if not isinstance(objects_Ids, list):
+            objects_Ids = []
+
+        filtered_Ids = [obj for obj in objects_Ids if obj in bpy.data.objects and bpy.data.objects[obj].type == self.prop_type]
 
         add_linked_cache(self, "object Ids", filtered_Ids)
         self.execute_next("exec")
@@ -138,9 +141,10 @@ class EGN_IsObjectValid(EG_Node):
         self.add_exec_out("invalid")
     
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        if is_object_valid(in_objectId):
+        in_objectId = str(self.get_input_value("object Id"))
+        if bpy.data.objects.get(in_objectId):
             self.execute_next("valid")
+
         else:
             self.execute_next("invalid")
 
@@ -157,11 +161,10 @@ class EGN_GetParent(EG_PureNode):
         self.add_out(socket="NodeSocketString", name="parent Id") # bind: parent Id -> on_parent_Id
     
     def on_parent_Id(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data and object_data.parent:
-            return object_data.parent.name
-        return ""
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        return bl_object.parent.name if bl_object and bl_object.parent else ""
 
 
 class EGN_GetChildren(EG_PureNode):
@@ -176,10 +179,12 @@ class EGN_GetChildren(EG_PureNode):
         self.add_out(socket=EGS_Array.bl_idname, name="children Ids") # bind: children Ids -> on_children_Ids
     
     def on_children_Ids(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data and object_data.children:
-            return [obj.name for obj in object_data.children]
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if bl_object and bl_object.children:
+            return [child.name for child in bl_object.children]
+        
         return []
 
 

@@ -17,19 +17,19 @@ class EGN_RenameObject(EG_Node):
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in(socket="NodeSocketString", name="object Id", hide_value=False)
-        self.add_in(socket="NodeSocketString", name="name", hide_value=False)
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketString", name="name", hide_value=False, default="New Name")
         self.add_exec_out("success")
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_name = self.get_input_value("name")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_name = str(self.get_input_value("name"))
 
-        object_data = bpy.data.objects.get(in_objectId)
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            object_data.name = in_name
+        if bl_object:
+            bl_object.name = in_name
             self.execute_next("success")
 
         else:
@@ -45,19 +45,19 @@ class EGN_RenameData(EG_Node):
 
     def init(self, context):
         self.add_exec_in("exec")
-        self.add_in(socket="NodeSocketString", name="object Id", hide_value=False)
-        self.add_in(socket="NodeSocketString", name="name", hide_value=False)
+        self.add_in("NodeSocketString", "object Id")
+        self.add_in(socket="NodeSocketString", name="name", hide_value=False, default="New Name")
         self.add_exec_out("success")
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_name = self.get_input_value("name")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_name = str(self.get_input_value("name"))
 
-        object_data = bpy.data.objects.get(in_objectId)
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data and object_data.data:
-            object_data.data.name = in_name
+        if bl_object and bl_object.data:
+            bl_object.data.name = in_name
             self.execute_next("success")
 
         else:
@@ -78,12 +78,13 @@ class EGN_DeleteObject(EG_Node):
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        object_data = bpy.data.objects.get(in_objectId)
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
 
-        if object_data:
-            bpy.data.objects.remove(object_data, do_unlink=True)
+        if bl_object:
+            bpy.data.objects.remove(bl_object, do_unlink=True)
             bpy.ops.ed.undo_push()
+
             self.execute_next("success")
             
         else:
@@ -113,7 +114,7 @@ class EGN_DuplicateObject(EG_Node):
         try:
             self.prop_objectId = ""
 
-            in_objectId = self.get_input_value("object Id")
+            in_objectId = str(self.get_input_value("object Id"))
             object_data = bpy.data.objects.get(in_objectId)
 
             if not object_data:
@@ -148,8 +149,8 @@ class EGN_SetParent(EG_Node):
         self.add_exec_out("failed")
     
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_parentId = self.get_input_value("parent Id")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_parentId = str(self.get_input_value("parent Id"))
 
         object_data = bpy.data.objects.get(in_objectId)
         parent_data = bpy.data.objects.get(in_parentId)
@@ -176,7 +177,7 @@ class EGN_ClearParent(EG_Node):
         self.add_exec_out("failed")
     
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
+        in_objectId = str(self.get_input_value("object Id"))
         object_data = bpy.data.objects.get(in_objectId)
 
         if object_data:

@@ -14,6 +14,7 @@ from .node.python import cache as n_cache
 
 from .node.blender import object as n_object
 from .node.blender import mesh as n_mesh
+from .node.blender import modifier as n_modifier
 from .node.blender import light as n_light
 
 
@@ -32,6 +33,7 @@ classes += n_cache.classes
 
 classes += n_object.classes
 classes += n_mesh.classes
+classes += n_modifier.classes
 classes += n_light.classes
 
 

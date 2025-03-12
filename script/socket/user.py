@@ -18,8 +18,16 @@ class EGS_Reference(EG_Socket):
     
     socket_color = (0.71, 0.32, 1.0, 1.0)
 
+class EGS_Modifier(EG_Socket):
+    """Blender's Modifier Socket"""
+    
+    bl_idname = "egs_bl_modifier"
+    bl_label = "Modifier"
+    
+    socket_color = (0.549, 0.349, 0.71, 1.0)
 
 classes = [
     EGS_Object,
-    EGS_Reference
+    EGS_Reference,
+    EGS_Modifier
 ]

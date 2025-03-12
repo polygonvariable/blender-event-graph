@@ -1,8 +1,9 @@
+import mathutils
 import bpy
 from bpy.props import ( BoolProperty, FloatProperty, EnumProperty, StringProperty, IntProperty, PointerProperty, CollectionProperty, FloatVectorProperty )
 
 from ....base.node import EG_Node, EG_PureNode
-from ....base.library import add_linked_cache, remove_linked_cache, get_linked_cache
+from ....base.library import add_linked_cache, remove_linked_cache, get_linked_cache, is_vector
 from ....socket.derived import EGS_Array
 from ....socket.primitive import EGS_Value
 
@@ -16,12 +17,16 @@ class EGN_GetLocation(EG_PureNode):
 
     def init(self, context):
         self.add_in("NodeSocketString", "object Id")
-        self.add_out("NodeSocketVector", "location") # bind: location -> on_location
+        self.add_out("NodeSocketVectorXYZ", "location") # bind: location -> on_location
 
     def on_location(self):
-        if not self.target_object:
-            return (0.0, 0.0, 0.0)
-        return self.target_object.location
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if not bl_object.location:
+            return tuple((0.0, 0.0, 0.0))
+        
+        return tuple(bl_object.location)
 
 
 class EGN_SetLocation(EG_Node):
@@ -34,18 +39,20 @@ class EGN_SetLocation(EG_Node):
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_in(socket="NodeSocketVector", name="location", hide_value=False)
+        self.add_in(socket="NodeSocketVectorXYZ", name="location", hide_value=False)
         self.add_exec_out("success")
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_location = self.get_input_value("location")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_location = tuple(self.get_input_value("location"))
 
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data:
-            object_data.location = in_location
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if bl_object and is_vector(in_location, 3):
+            bl_object.location = in_location
             self.execute_next("success")
+
         else:
             self.execute_next("failed")
 
@@ -59,12 +66,16 @@ class EGN_GetRotation(EG_PureNode):
 
     def init(self, context):
         self.add_in("NodeSocketString", "object Id")
-        self.add_out("NodeSocketVector", "rotation") # bind: rotation -> on_rotation
+        self.add_out("NodeSocketVectorEuler", "rotation") # bind: rotation -> on_rotation
 
     def on_rotation(self):
-        if not self.target_object:
-            return (0.0, 0.0, 0.0)
-        return self.target_object.rotation_euler
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if not bl_object.rotation_euler:
+            return tuple((0.0, 0.0, 0.0))
+        
+        return tuple(bl_object.rotation_euler)
 
 
 class EGN_SetRotation(EG_Node):
@@ -77,18 +88,20 @@ class EGN_SetRotation(EG_Node):
     def init(self, context):
         self.add_exec_in("exec")
         self.add_in("NodeSocketString", "object Id")
-        self.add_in(socket="NodeSocketVector", name="rotation", hide_value=False)
+        self.add_in(socket="NodeSocketVectorEuler", name="rotation", hide_value=False)
         self.add_exec_out("success")
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_rotation = self.get_input_value("rotation")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_rotation = tuple(self.get_input_value("rotation"))
 
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data:
-            object_data.rotation_euler = in_rotation
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if bl_object and is_vector(in_rotation, 3):
+            bl_object.rotation_euler = in_rotation
             self.execute_next("success")
+
         else:
             self.execute_next("failed")
 
@@ -105,9 +118,13 @@ class EGN_GetScale(EG_PureNode):
         self.add_out("NodeSocketVector", "scale") # bind: scale -> on_scale
 
     def on_scale(self):
-        if not self.target_object:
-            return (0.0, 0.0, 0.0)
-        return self.target_object.scale
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if not bl_object.scale:
+            return tuple((0.0, 0.0, 0.0))
+        
+        return tuple(bl_object.scale)
 
 
 class EGN_SetScale(EG_Node):
@@ -125,13 +142,15 @@ class EGN_SetScale(EG_Node):
         self.add_exec_out("failed")
 
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_scale = self.get_input_value("scale")
-
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data:
-            object_data.scale = in_scale
+        in_objectId = str(self.get_input_value("object Id"))
+        in_scale = tuple(self.get_input_value("scale"))
+        
+        bl_object = bpy.data.objects.get(in_objectId)
+        
+        if bl_object and is_vector(in_scale, 3):
+            bl_object.scale = in_scale
             self.execute_next("success")
+
         else:
             self.execute_next("failed")
 
@@ -148,9 +167,13 @@ class EGN_GetDimension(EG_PureNode):
         self.add_out("NodeSocketVector", "dimension") # bind: dimension -> on_dimension
 
     def on_dimension(self):
-        if not self.target_object:
-            return (0.0, 0.0, 0.0)
-        return self.target_object.dimensions
+        in_objectId = str(self.get_input_value("object Id"))
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if not bl_object.dimensions:
+            return tuple((0.0, 0.0, 0.0))
+        
+        return tuple(bl_object.dimensions)
 
 
 class EGN_SetDimension(EG_Node):
@@ -168,12 +191,13 @@ class EGN_SetDimension(EG_Node):
         self.add_exec_out("failed")
     
     def execute(self):
-        in_objectId = self.get_input_value("object Id")
-        in_dimension = self.get_input_value("dimension")
+        in_objectId = str(self.get_input_value("object Id"))
+        in_dimension = tuple(self.get_input_value("dimension"))
 
-        object_data = bpy.data.objects.get(in_objectId)
-        if object_data:
-            object_data.dimensions = in_dimension
+        bl_object = bpy.data.objects.get(in_objectId)
+
+        if bl_object and bl_object.dimensions and is_vector(in_dimension, 3):
+            bl_object.dimensions = in_dimension
             self.execute_next("success")
 
         else:

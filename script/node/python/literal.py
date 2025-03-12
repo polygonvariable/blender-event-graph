@@ -184,7 +184,7 @@ class PNY_Make2D(EG_PureNode):
     def on_result(self):
         x = self.get_input_value("x")
         y = self.get_input_value("y")
-        return [x, y]
+        return tuple((x, y))
     
 
 class PNY_Make3D(EG_PureNode):
@@ -203,7 +203,7 @@ class PNY_Make3D(EG_PureNode):
         x = self.get_input_value("x")
         y = self.get_input_value("y")
         z = self.get_input_value("z")
-        return [x, y, z]
+        return tuple((x, y, z))
     
 
 class PNY_Make4D(EG_PureNode):
@@ -224,7 +224,7 @@ class PNY_Make4D(EG_PureNode):
         y = self.get_input_value("y")
         z = self.get_input_value("z")
         w = self.get_input_value("w")
-        return [x, y, z, w]
+        return tuple((x, y, z, w))
 
 
 classes = [

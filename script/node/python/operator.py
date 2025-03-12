@@ -23,13 +23,13 @@ class EGN_ArithmeticOperator(EG_PureNode):
         layout.prop(self, "operator")
 
     def init(self, context):
-        self.add_in(EGS_Value.bl_idname, "a")
-        self.add_in(EGS_Value.bl_idname, "b")
+        self.add_in(socket="NodeSocketFloat", name="a", hide_value=False)
+        self.add_in(socket="NodeSocketFloat", name="b", hide_value=False)
         self.add_out(EGS_Value.bl_idname, "result") # result is linked to on_result
 
     def on_result(self):
-        in_a = self.get_input_value("a")
-        in_b = self.get_input_value("b")
+        in_a = float(self.get_input_value("a"))
+        in_b = float(self.get_input_value("b"))
         in_operator = self.operator
 
         if in_operator == "+":
@@ -210,20 +210,47 @@ class EGN_MembershipOperator(EG_PureNode):
         return False
 
 
-class EGN_IsNone(EG_PureNode):
-    """Check if value is None"""
+class EGN_IsOfClass(EG_PureNode):
+    """Check if value is of certain class"""
     
-    bl_idname = "egn_python_is_none"
-    bl_label = "Is None"
+    bl_idname = "egn_python_is_of_class"
+    bl_label = "Is Of Class"
+
+    prop_type: EnumProperty(
+        name="Type",
+        items=[
+            ("STRING", "String", ""),
+            ("FLOAT", "Float", ""),
+            ("INTEGER", "Integer", ""),
+            ("ARRAY", "Array", ""),
+            ("SET", "Set", ""),
+            ("TUPLE", "Tuple", ""),
+            ("MAP", "Map", ""),
+            ("NONE", "None", ""),
+        ]
+    ) # type: ignore
 
     def init(self, context):
-        self.add_in(EGS_Value.bl_idname, "a")
+        self.add_in(EGS_Value.bl_idname, "value")
         self.add_out("NodeSocketBool", "result") # bind: result -> on_result
 
-    def on_result(self):
-        in_a = self.get_input_value("a")
-        return in_a is None
+    def draw_buttons(self, context, layout):
+        layout.prop(self, "prop_type")
 
+    def on_result(self):
+        in_value = self.get_input_value("value")
+        type_checks = {
+            "STRING": str,
+            "FLOAT": float,
+            "INTEGER": int,
+            "ARRAY": list,
+            "SET": set,
+            "TUPLE": tuple,
+            "MAP": dict,
+            "NONE": type(None),
+        }
+        return isinstance(in_value, type_checks.get(self.prop_type))
+   
 
 classes = [
     EGN_ArithmeticOperator,
@@ -233,5 +260,5 @@ classes = [
     EGN_LogicalNotOperator,
     EGN_IdentityOperator,
     EGN_MembershipOperator,
-    EGN_IsNone
+    EGN_IsOfClass
 ]

@@ -1,3 +1,4 @@
+import mathutils
 import bpy
 
 
@@ -16,9 +17,8 @@ def create_enum(items = []):
         index += 1
     return enum_items
 
-
-def is_object_valid(objectId):
-    return objectId and isinstance(objectId, str) and bpy.data.objects.get(objectId)
+def is_vector(vec, size):
+    return isinstance(vec, tuple) and len(vec) == size
 
 
 cache_map = {}
